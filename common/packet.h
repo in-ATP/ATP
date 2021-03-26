@@ -69,8 +69,9 @@ const unsigned char WORKER_IP_ETH_UDP_HEADER[] = { PS_FILTER_TEMPLATE, SRC_MAC, 
         // isForceFoward  :  1;
 
         /* Current version
-        PSIndex        :  3;
-        dataIndex      :  1; 
+        overflow       :  1;
+        PSIndex        :  2;
+        dataIndex      :  1;
         ECN            :  1;
         isResend       :  1;
         isSWCollision  :  1;
@@ -135,8 +136,6 @@ void inline make_p4ml_layer_and_copy_to(void* payload, Job* job_info, AppInfo* a
         send_data = used_data + *offset;
     }
 
-
-    memcpy(agg_header->vector, send_data, sizeof(uint32_t) * (MAX_ENTRIES_PER_PACKET));
     // p4ml_header_print_h(agg_header, "Make");
 }
 
