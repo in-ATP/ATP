@@ -8,7 +8,6 @@ import sys
 import time
 import unittest
 
-from envTest.p4_pd_rpc.ttypes import *
 from pltfm_pm_rpc.ttypes import *
 from pal_rpc.ttypes import *
 from ptf import config
@@ -18,7 +17,6 @@ from res_pd_rpc.ttypes import *
 from ptf import config
 from ptf.thriftutils import *
 
-from basic_switching.p4_pd_rpc.ttypes import *
 from res_pd_rpc.ttypes import *
 from port_mapping import *
 
