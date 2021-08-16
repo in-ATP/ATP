@@ -1,14 +1,26 @@
 @pragma stage 4
 table processEntry1 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry1;
-        noequ0_processentry1;
+        // noequ0_processentry1;
+        // equ0_processentry1;
+        // noequ0_processentry1andWriteToPacket;
+        processentry1andWriteToPacket;
+        entry1WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry1;
+#endif
     }
-    // default_action : noequ0_processentry1;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
 @pragma stage 4
@@ -46,26 +58,40 @@ table noequ0_processEntry1andWriteToPacket {
 }
 
 @pragma stage 4
-table cleanEntry1 {
+table substituteEntry1 {
     actions {
-        do_cleanEntry1;
+        do_substituteEntry1;
     }
-    default_action : do_cleanEntry1();
+    default_action : do_substituteEntry1();
     size : 1;
 }
 
+// @pragma stage 4
 table processEntry2 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry2;
-        noequ0_processentry2;
+        // noequ0_processentry2;
+        // equ0_processentry2;
+        // noequ0_processentry2andWriteToPacket;
+        processentry2andWriteToPacket;
+        entry2WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry2;
+#endif
     }
-    // default_action : noequ0_processentry2;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 4
 table noequ0_processEntry2 {
     actions {
         noequ0_processentry2;
@@ -74,6 +100,7 @@ table noequ0_processEntry2 {
     size : 1;
 }
 
+// @pragma stage 4
 table Entry2WriteToPacket {
     actions {
         entry2WriteToPacket;
@@ -82,6 +109,7 @@ table Entry2WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 4
 table processEntry2andWriteToPacket {
     actions {
         processentry2andWriteToPacket;
@@ -89,6 +117,7 @@ table processEntry2andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 4
 table noequ0_processEntry2andWriteToPacket {
     actions {
         noequ0_processentry2andWriteToPacket;
@@ -96,26 +125,41 @@ table noequ0_processEntry2andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry2 {
+// @pragma stage 4
+table substituteEntry2 {
     actions {
-        do_cleanEntry2;
+        do_substituteEntry2;
     }
-    default_action : do_cleanEntry2();
+    default_action : do_substituteEntry2();
     size : 1;
 }
 
+// @pragma stage 4
 table processEntry3 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry3;
-        noequ0_processentry3;
+        // noequ0_processentry3;
+        // equ0_processentry3;
+        // noequ0_processentry3andWriteToPacket;
+        processentry3andWriteToPacket;
+        entry3WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry3;
+#endif
     }
-    // default_action : noequ0_processentry3;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 4
 table noequ0_processEntry3 {
     actions {
         noequ0_processentry3;
@@ -124,6 +168,7 @@ table noequ0_processEntry3 {
     size : 1;
 }
 
+// @pragma stage 4
 table Entry3WriteToPacket {
     actions {
         entry3WriteToPacket;
@@ -132,6 +177,7 @@ table Entry3WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 4
 table processEntry3andWriteToPacket {
     actions {
         processentry3andWriteToPacket;
@@ -139,6 +185,7 @@ table processEntry3andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 4
 table noequ0_processEntry3andWriteToPacket {
     actions {
         noequ0_processentry3andWriteToPacket;
@@ -146,26 +193,41 @@ table noequ0_processEntry3andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry3 {
+// @pragma stage 4
+table substituteEntry3 {
     actions {
-        do_cleanEntry3;
+        do_substituteEntry3;
     }
-    default_action : do_cleanEntry3();
+    default_action : do_substituteEntry3();
     size : 1;
 }
 
+// @pragma stage 4
 table processEntry4 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry4;
-        noequ0_processentry4;
+        // noequ0_processentry4;
+        // equ0_processentry4;
+        // noequ0_processentry4andWriteToPacket;
+        processentry4andWriteToPacket;
+        entry4WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry4;
+#endif
     }
-    // default_action : noequ0_processentry4;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 4
 table noequ0_processEntry4 {
     actions {
         noequ0_processentry4;
@@ -174,6 +236,7 @@ table noequ0_processEntry4 {
     size : 1;
 }
 
+// @pragma stage 4
 table Entry4WriteToPacket {
     actions {
         entry4WriteToPacket;
@@ -182,6 +245,7 @@ table Entry4WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 4
 table processEntry4andWriteToPacket {
     actions {
         processentry4andWriteToPacket;
@@ -189,6 +253,7 @@ table processEntry4andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 4
 table noequ0_processEntry4andWriteToPacket {
     actions {
         noequ0_processentry4andWriteToPacket;
@@ -196,26 +261,41 @@ table noequ0_processEntry4andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry4 {
+// @pragma stage 4
+table substituteEntry4 {
     actions {
-        do_cleanEntry4;
+        do_substituteEntry4;
     }
-    default_action : do_cleanEntry4();
+    default_action : do_substituteEntry4();
     size : 1;
 }
 
+// @pragma stage 5
 table processEntry5 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry5;
-        noequ0_processentry5;
+        // noequ0_processentry5;
+        // equ0_processentry5;
+        // noequ0_processentry5andWriteToPacket;
+        processentry5andWriteToPacket;
+        entry5WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry5;
+#endif
     }
-    // default_action : noequ0_processentry5;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 5
 table noequ0_processEntry5 {
     actions {
         noequ0_processentry5;
@@ -224,6 +304,7 @@ table noequ0_processEntry5 {
     size : 1;
 }
 
+// @pragma stage 5
 table Entry5WriteToPacket {
     actions {
         entry5WriteToPacket;
@@ -232,6 +313,7 @@ table Entry5WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 5
 table processEntry5andWriteToPacket {
     actions {
         processentry5andWriteToPacket;
@@ -239,6 +321,7 @@ table processEntry5andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 5
 table noequ0_processEntry5andWriteToPacket {
     actions {
         noequ0_processentry5andWriteToPacket;
@@ -246,26 +329,41 @@ table noequ0_processEntry5andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry5 {
+// @pragma stage 5
+table substituteEntry5 {
     actions {
-        do_cleanEntry5;
+        do_substituteEntry5;
     }
-    default_action : do_cleanEntry5();
+    default_action : do_substituteEntry5();
     size : 1;
 }
 
+// @pragma stage 5
 table processEntry6 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry6;
-        noequ0_processentry6;
+        // noequ0_processentry6;
+        // equ0_processentry6;
+        // noequ0_processentry6andWriteToPacket;
+        processentry6andWriteToPacket;
+        entry6WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry6;
+#endif
     }
-    // default_action : noequ0_processentry6;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 5
 table noequ0_processEntry6 {
     actions {
         noequ0_processentry6;
@@ -274,6 +372,7 @@ table noequ0_processEntry6 {
     size : 1;
 }
 
+// @pragma stage 5
 table Entry6WriteToPacket {
     actions {
         entry6WriteToPacket;
@@ -282,6 +381,7 @@ table Entry6WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 5
 table processEntry6andWriteToPacket {
     actions {
         processentry6andWriteToPacket;
@@ -289,6 +389,7 @@ table processEntry6andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 5
 table noequ0_processEntry6andWriteToPacket {
     actions {
         noequ0_processentry6andWriteToPacket;
@@ -296,26 +397,41 @@ table noequ0_processEntry6andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry6 {
+// @pragma stage 5
+table substituteEntry6 {
     actions {
-        do_cleanEntry6;
+        do_substituteEntry6;
     }
-    default_action : do_cleanEntry6();
+    default_action : do_substituteEntry6();
     size : 1;
 }
 
+// @pragma stage 5
 table processEntry7 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry7;
-        noequ0_processentry7;
+        // noequ0_processentry7;
+        // equ0_processentry7;
+        // noequ0_processentry7andWriteToPacket;
+        processentry7andWriteToPacket;
+        entry7WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry7;
+#endif
     }
-    // default_action : noequ0_processentry7;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 5
 table noequ0_processEntry7 {
     actions {
         noequ0_processentry7;
@@ -324,6 +440,7 @@ table noequ0_processEntry7 {
     size : 1;
 }
 
+// @pragma stage 5
 table Entry7WriteToPacket {
     actions {
         entry7WriteToPacket;
@@ -332,6 +449,7 @@ table Entry7WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 5
 table processEntry7andWriteToPacket {
     actions {
         processentry7andWriteToPacket;
@@ -339,6 +457,7 @@ table processEntry7andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 5
 table noequ0_processEntry7andWriteToPacket {
     actions {
         noequ0_processentry7andWriteToPacket;
@@ -346,26 +465,41 @@ table noequ0_processEntry7andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry7 {
+// @pragma stage 5
+table substituteEntry7 {
     actions {
-        do_cleanEntry7;
+        do_substituteEntry7;
     }
-    default_action : do_cleanEntry7();
+    default_action : do_substituteEntry7();
     size : 1;
 }
 
+// @pragma stage 5
 table processEntry8 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry8;
-        noequ0_processentry8;
+        // noequ0_processentry8;
+        // equ0_processentry8;
+        // noequ0_processentry8andWriteToPacket;
+        processentry8andWriteToPacket;
+        entry8WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry8;
+#endif
     }
-    // default_action : noequ0_processentry8;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 5
 table noequ0_processEntry8 {
     actions {
         noequ0_processentry8;
@@ -374,6 +508,7 @@ table noequ0_processEntry8 {
     size : 1;
 }
 
+// @pragma stage 5
 table Entry8WriteToPacket {
     actions {
         entry8WriteToPacket;
@@ -382,6 +517,7 @@ table Entry8WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 5
 table processEntry8andWriteToPacket {
     actions {
         processentry8andWriteToPacket;
@@ -389,6 +525,7 @@ table processEntry8andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 5
 table noequ0_processEntry8andWriteToPacket {
     actions {
         noequ0_processentry8andWriteToPacket;
@@ -396,26 +533,41 @@ table noequ0_processEntry8andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry8 {
+// @pragma stage 5
+table substituteEntry8 {
     actions {
-        do_cleanEntry8;
+        do_substituteEntry8;
     }
-    default_action : do_cleanEntry8();
+    default_action : do_substituteEntry8();
     size : 1;
 }
 
+// @pragma stage 6
 table processEntry9 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry9;
-        noequ0_processentry9;
+        // noequ0_processentry9;
+        // equ0_processentry9;
+        // noequ0_processentry9andWriteToPacket;
+        processentry9andWriteToPacket;
+        entry9WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry9;
+#endif
     }
-    // default_action : noequ0_processentry9;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 6
 table noequ0_processEntry9 {
     actions {
         noequ0_processentry9;
@@ -424,6 +576,7 @@ table noequ0_processEntry9 {
     size : 1;
 }
 
+// @pragma stage 6
 table Entry9WriteToPacket {
     actions {
         entry9WriteToPacket;
@@ -432,6 +585,7 @@ table Entry9WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 6
 table processEntry9andWriteToPacket {
     actions {
         processentry9andWriteToPacket;
@@ -439,6 +593,7 @@ table processEntry9andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 6
 table noequ0_processEntry9andWriteToPacket {
     actions {
         noequ0_processentry9andWriteToPacket;
@@ -446,26 +601,41 @@ table noequ0_processEntry9andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry9 {
+// @pragma stage 6
+table substituteEntry9 {
     actions {
-        do_cleanEntry9;
+        do_substituteEntry9;
     }
-    default_action : do_cleanEntry9();
+    default_action : do_substituteEntry9();
     size : 1;
 }
 
+// @pragma stage 6
 table processEntry10 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry10;
-        noequ0_processentry10;
+        // noequ0_processentry10;
+        // equ0_processentry10;
+        // noequ0_processentry10andWriteToPacket;
+        processentry10andWriteToPacket;
+        entry10WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry10;
+#endif
     }
-    // default_action : noequ0_processentry10;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 6
 table noequ0_processEntry10 {
     actions {
         noequ0_processentry10;
@@ -474,6 +644,7 @@ table noequ0_processEntry10 {
     size : 1;
 }
 
+// @pragma stage 6
 table Entry10WriteToPacket {
     actions {
         entry10WriteToPacket;
@@ -482,6 +653,7 @@ table Entry10WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 6
 table processEntry10andWriteToPacket {
     actions {
         processentry10andWriteToPacket;
@@ -489,6 +661,7 @@ table processEntry10andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 6
 table noequ0_processEntry10andWriteToPacket {
     actions {
         noequ0_processentry10andWriteToPacket;
@@ -496,26 +669,41 @@ table noequ0_processEntry10andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry10 {
+// @pragma stage 6
+table substituteEntry10 {
     actions {
-        do_cleanEntry10;
+        do_substituteEntry10;
     }
-    default_action : do_cleanEntry10();
+    default_action : do_substituteEntry10();
     size : 1;
 }
 
+// @pragma stage 6
 table processEntry11 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry11;
-        noequ0_processentry11;
+        // noequ0_processentry11;
+        // equ0_processentry11;
+        // noequ0_processentry11andWriteToPacket;
+        processentry11andWriteToPacket;
+        entry11WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry11;
+#endif
     }
-    // default_action : noequ0_processentry11;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 6
 table noequ0_processEntry11 {
     actions {
         noequ0_processentry11;
@@ -524,6 +712,7 @@ table noequ0_processEntry11 {
     size : 1;
 }
 
+// @pragma stage 6
 table Entry11WriteToPacket {
     actions {
         entry11WriteToPacket;
@@ -532,6 +721,7 @@ table Entry11WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 6
 table processEntry11andWriteToPacket {
     actions {
         processentry11andWriteToPacket;
@@ -539,6 +729,7 @@ table processEntry11andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 6
 table noequ0_processEntry11andWriteToPacket {
     actions {
         noequ0_processentry11andWriteToPacket;
@@ -546,26 +737,41 @@ table noequ0_processEntry11andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry11 {
+// @pragma stage 6
+table substituteEntry11 {
     actions {
-        do_cleanEntry11;
+        do_substituteEntry11;
     }
-    default_action : do_cleanEntry11();
+    default_action : do_substituteEntry11();
     size : 1;
 }
 
+// @pragma stage 6
 table processEntry12 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry12;
-        noequ0_processentry12;
+        // noequ0_processentry12;
+        // equ0_processentry12;
+        // noequ0_processentry12andWriteToPacket;
+        processentry12andWriteToPacket;
+        entry12WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry12;
+#endif
     }
-    // default_action : noequ0_processentry12;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 6
 table noequ0_processEntry12 {
     actions {
         noequ0_processentry12;
@@ -574,6 +780,7 @@ table noequ0_processEntry12 {
     size : 1;
 }
 
+// @pragma stage 6
 table Entry12WriteToPacket {
     actions {
         entry12WriteToPacket;
@@ -582,6 +789,7 @@ table Entry12WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 6
 table processEntry12andWriteToPacket {
     actions {
         processentry12andWriteToPacket;
@@ -589,6 +797,7 @@ table processEntry12andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 6
 table noequ0_processEntry12andWriteToPacket {
     actions {
         noequ0_processentry12andWriteToPacket;
@@ -596,26 +805,41 @@ table noequ0_processEntry12andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry12 {
+// @pragma stage 6
+table substituteEntry12 {
     actions {
-        do_cleanEntry12;
+        do_substituteEntry12;
     }
-    default_action : do_cleanEntry12();
+    default_action : do_substituteEntry12();
     size : 1;
 }
 
+// @pragma stage 7
 table processEntry13 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry13;
-        noequ0_processentry13;
+        // noequ0_processentry13;
+        // equ0_processentry13;
+        // noequ0_processentry13andWriteToPacket;
+        processentry13andWriteToPacket;
+        entry13WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry13;
+#endif
     }
-    // default_action : noequ0_processentry13;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 7
 table noequ0_processEntry13 {
     actions {
         noequ0_processentry13;
@@ -624,6 +848,7 @@ table noequ0_processEntry13 {
     size : 1;
 }
 
+// @pragma stage 7
 table Entry13WriteToPacket {
     actions {
         entry13WriteToPacket;
@@ -632,6 +857,7 @@ table Entry13WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 7
 table processEntry13andWriteToPacket {
     actions {
         processentry13andWriteToPacket;
@@ -639,6 +865,7 @@ table processEntry13andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 7
 table noequ0_processEntry13andWriteToPacket {
     actions {
         noequ0_processentry13andWriteToPacket;
@@ -646,26 +873,41 @@ table noequ0_processEntry13andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry13 {
+// @pragma stage 7
+table substituteEntry13 {
     actions {
-        do_cleanEntry13;
+        do_substituteEntry13;
     }
-    default_action : do_cleanEntry13();
+    default_action : do_substituteEntry13();
     size : 1;
 }
 
+// @pragma stage 7
 table processEntry14 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry14;
-        noequ0_processentry14;
+        // noequ0_processentry14;
+        // equ0_processentry14;
+        // noequ0_processentry14andWriteToPacket;
+        processentry14andWriteToPacket;
+        entry14WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry14;
+#endif
     }
-    // default_action : noequ0_processentry14;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 7
 table noequ0_processEntry14 {
     actions {
         noequ0_processentry14;
@@ -674,6 +916,7 @@ table noequ0_processEntry14 {
     size : 1;
 }
 
+// @pragma stage 7
 table Entry14WriteToPacket {
     actions {
         entry14WriteToPacket;
@@ -682,6 +925,7 @@ table Entry14WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 7
 table processEntry14andWriteToPacket {
     actions {
         processentry14andWriteToPacket;
@@ -689,6 +933,7 @@ table processEntry14andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 7
 table noequ0_processEntry14andWriteToPacket {
     actions {
         noequ0_processentry14andWriteToPacket;
@@ -696,26 +941,41 @@ table noequ0_processEntry14andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry14 {
+// @pragma stage 7
+table substituteEntry14 {
     actions {
-        do_cleanEntry14;
+        do_substituteEntry14;
     }
-    default_action : do_cleanEntry14();
+    default_action : do_substituteEntry14();
     size : 1;
 }
 
+// @pragma stage 7
 table processEntry15 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry15;
-        noequ0_processentry15;
+        // noequ0_processentry15;
+        // equ0_processentry15;
+        // noequ0_processentry15andWriteToPacket;
+        processentry15andWriteToPacket;
+        entry15WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry15;
+#endif
     }
-    // default_action : noequ0_processentry15;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 7
 table noequ0_processEntry15 {
     actions {
         noequ0_processentry15;
@@ -724,6 +984,7 @@ table noequ0_processEntry15 {
     size : 1;
 }
 
+// @pragma stage 7
 table Entry15WriteToPacket {
     actions {
         entry15WriteToPacket;
@@ -732,6 +993,7 @@ table Entry15WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 7
 table processEntry15andWriteToPacket {
     actions {
         processentry15andWriteToPacket;
@@ -739,6 +1001,7 @@ table processEntry15andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 7
 table noequ0_processEntry15andWriteToPacket {
     actions {
         noequ0_processentry15andWriteToPacket;
@@ -746,26 +1009,41 @@ table noequ0_processEntry15andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry15 {
+// @pragma stage 7
+table substituteEntry15 {
     actions {
-        do_cleanEntry15;
+        do_substituteEntry15;
     }
-    default_action : do_cleanEntry15();
+    default_action : do_substituteEntry15();
     size : 1;
 }
 
+// @pragma stage 7
 table processEntry16 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry16;
-        noequ0_processentry16;
+        // noequ0_processentry16;
+        // equ0_processentry16;
+        // noequ0_processentry16andWriteToPacket;
+        processentry16andWriteToPacket;
+        entry16WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry16;
+#endif
     }
-    // default_action : noequ0_processentry16;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 7
 table noequ0_processEntry16 {
     actions {
         noequ0_processentry16;
@@ -774,6 +1052,7 @@ table noequ0_processEntry16 {
     size : 1;
 }
 
+// @pragma stage 7
 table Entry16WriteToPacket {
     actions {
         entry16WriteToPacket;
@@ -782,6 +1061,7 @@ table Entry16WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 7
 table processEntry16andWriteToPacket {
     actions {
         processentry16andWriteToPacket;
@@ -789,6 +1069,7 @@ table processEntry16andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 7
 table noequ0_processEntry16andWriteToPacket {
     actions {
         noequ0_processentry16andWriteToPacket;
@@ -796,26 +1077,41 @@ table noequ0_processEntry16andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry16 {
+// @pragma stage 7
+table substituteEntry16 {
     actions {
-        do_cleanEntry16;
+        do_substituteEntry16;
     }
-    default_action : do_cleanEntry16();
+    default_action : do_substituteEntry16();
     size : 1;
 }
 
+// @pragma stage 8
 table processEntry17 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry17;
-        noequ0_processentry17;
+        // noequ0_processentry17;
+        // equ0_processentry17;
+        // noequ0_processentry17andWriteToPacket;
+        processentry17andWriteToPacket;
+        entry17WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry17;
+#endif
     }
-    // default_action : noequ0_processentry17;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 8
 table noequ0_processEntry17 {
     actions {
         noequ0_processentry17;
@@ -824,6 +1120,7 @@ table noequ0_processEntry17 {
     size : 1;
 }
 
+// @pragma stage 8
 table Entry17WriteToPacket {
     actions {
         entry17WriteToPacket;
@@ -832,6 +1129,7 @@ table Entry17WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 8
 table processEntry17andWriteToPacket {
     actions {
         processentry17andWriteToPacket;
@@ -839,6 +1137,7 @@ table processEntry17andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 8
 table noequ0_processEntry17andWriteToPacket {
     actions {
         noequ0_processentry17andWriteToPacket;
@@ -846,26 +1145,41 @@ table noequ0_processEntry17andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry17 {
+// @pragma stage 8
+table substituteEntry17 {
     actions {
-        do_cleanEntry17;
+        do_substituteEntry17;
     }
-    default_action : do_cleanEntry17();
+    default_action : do_substituteEntry17();
     size : 1;
 }
 
+// @pragma stage 8
 table processEntry18 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry18;
-        noequ0_processentry18;
+        // noequ0_processentry18;
+        // equ0_processentry18;
+        // noequ0_processentry18andWriteToPacket;
+        processentry18andWriteToPacket;
+        entry18WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry18;
+#endif
     }
-    // default_action : noequ0_processentry18;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 8
 table noequ0_processEntry18 {
     actions {
         noequ0_processentry18;
@@ -874,6 +1188,7 @@ table noequ0_processEntry18 {
     size : 1;
 }
 
+// @pragma stage 8
 table Entry18WriteToPacket {
     actions {
         entry18WriteToPacket;
@@ -882,6 +1197,7 @@ table Entry18WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 8
 table processEntry18andWriteToPacket {
     actions {
         processentry18andWriteToPacket;
@@ -889,6 +1205,7 @@ table processEntry18andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 8
 table noequ0_processEntry18andWriteToPacket {
     actions {
         noequ0_processentry18andWriteToPacket;
@@ -896,26 +1213,41 @@ table noequ0_processEntry18andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry18 {
+// @pragma stage 8
+table substituteEntry18 {
     actions {
-        do_cleanEntry18;
+        do_substituteEntry18;
     }
-    default_action : do_cleanEntry18();
+    default_action : do_substituteEntry18();
     size : 1;
 }
 
+// @pragma stage 8
 table processEntry19 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry19;
-        noequ0_processentry19;
+        // noequ0_processentry19;
+        // equ0_processentry19;
+        // noequ0_processentry19andWriteToPacket;
+        processentry19andWriteToPacket;
+        entry19WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry19;
+#endif
     }
-    // default_action : noequ0_processentry19;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 8
 table noequ0_processEntry19 {
     actions {
         noequ0_processentry19;
@@ -924,6 +1256,7 @@ table noequ0_processEntry19 {
     size : 1;
 }
 
+// @pragma stage 8
 table Entry19WriteToPacket {
     actions {
         entry19WriteToPacket;
@@ -932,6 +1265,7 @@ table Entry19WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 8
 table processEntry19andWriteToPacket {
     actions {
         processentry19andWriteToPacket;
@@ -939,6 +1273,7 @@ table processEntry19andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 8
 table noequ0_processEntry19andWriteToPacket {
     actions {
         noequ0_processentry19andWriteToPacket;
@@ -946,26 +1281,41 @@ table noequ0_processEntry19andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry19 {
+// @pragma stage 8
+table substituteEntry19 {
     actions {
-        do_cleanEntry19;
+        do_substituteEntry19;
     }
-    default_action : do_cleanEntry19();
+    default_action : do_substituteEntry19();
     size : 1;
 }
 
+// @pragma stage 8
 table processEntry20 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry20;
-        noequ0_processentry20;
+        // noequ0_processentry20;
+        // equ0_processentry20;
+        // noequ0_processentry20andWriteToPacket;
+        processentry20andWriteToPacket;
+        entry20WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry20;
+#endif
     }
-    // default_action : noequ0_processentry20;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 8
 table noequ0_processEntry20 {
     actions {
         noequ0_processentry20;
@@ -974,6 +1324,7 @@ table noequ0_processEntry20 {
     size : 1;
 }
 
+// @pragma stage 8
 table Entry20WriteToPacket {
     actions {
         entry20WriteToPacket;
@@ -982,6 +1333,7 @@ table Entry20WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 8
 table processEntry20andWriteToPacket {
     actions {
         processentry20andWriteToPacket;
@@ -989,6 +1341,7 @@ table processEntry20andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 8
 table noequ0_processEntry20andWriteToPacket {
     actions {
         noequ0_processentry20andWriteToPacket;
@@ -996,26 +1349,41 @@ table noequ0_processEntry20andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry20 {
+// @pragma stage 8
+table substituteEntry20 {
     actions {
-        do_cleanEntry20;
+        do_substituteEntry20;
     }
-    default_action : do_cleanEntry20();
+    default_action : do_substituteEntry20();
     size : 1;
 }
 
+// @pragma stage 9
 table processEntry21 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry21;
-        noequ0_processentry21;
+        // noequ0_processentry21;
+        // equ0_processentry21;
+        // noequ0_processentry21andWriteToPacket;
+        processentry21andWriteToPacket;
+        entry21WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry21;
+#endif
     }
-    // default_action : noequ0_processentry21;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 9
 table noequ0_processEntry21 {
     actions {
         noequ0_processentry21;
@@ -1024,6 +1392,7 @@ table noequ0_processEntry21 {
     size : 1;
 }
 
+// @pragma stage 9
 table Entry21WriteToPacket {
     actions {
         entry21WriteToPacket;
@@ -1032,6 +1401,7 @@ table Entry21WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 9
 table processEntry21andWriteToPacket {
     actions {
         processentry21andWriteToPacket;
@@ -1039,6 +1409,7 @@ table processEntry21andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 9
 table noequ0_processEntry21andWriteToPacket {
     actions {
         noequ0_processentry21andWriteToPacket;
@@ -1046,26 +1417,41 @@ table noequ0_processEntry21andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry21 {
+// @pragma stage 9
+table substituteEntry21 {
     actions {
-        do_cleanEntry21;
+        do_substituteEntry21;
     }
-    default_action : do_cleanEntry21();
+    default_action : do_substituteEntry21();
     size : 1;
 }
 
+// @pragma stage 9
 table processEntry22 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry22;
-        noequ0_processentry22;
+        // noequ0_processentry22;
+        // equ0_processentry22;
+        // noequ0_processentry22andWriteToPacket;
+        processentry22andWriteToPacket;
+        entry22WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry22;
+#endif
     }
-    // default_action : noequ0_processentry22;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 9
 table noequ0_processEntry22 {
     actions {
         noequ0_processentry22;
@@ -1074,6 +1460,7 @@ table noequ0_processEntry22 {
     size : 1;
 }
 
+// @pragma stage 9
 table Entry22WriteToPacket {
     actions {
         entry22WriteToPacket;
@@ -1082,6 +1469,7 @@ table Entry22WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 9
 table processEntry22andWriteToPacket {
     actions {
         processentry22andWriteToPacket;
@@ -1089,6 +1477,7 @@ table processEntry22andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 9
 table noequ0_processEntry22andWriteToPacket {
     actions {
         noequ0_processentry22andWriteToPacket;
@@ -1096,26 +1485,41 @@ table noequ0_processEntry22andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry22 {
+// @pragma stage 9
+table substituteEntry22 {
     actions {
-        do_cleanEntry22;
+        do_substituteEntry22;
     }
-    default_action : do_cleanEntry22();
+    default_action : do_substituteEntry22();
     size : 1;
 }
 
+// @pragma stage 9
 table processEntry23 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry23;
-        noequ0_processentry23;
+        // noequ0_processentry23;
+        // equ0_processentry23;
+        // noequ0_processentry23andWriteToPacket;
+        processentry23andWriteToPacket;
+        entry23WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry23;
+#endif
     }
-    // default_action : noequ0_processentry23;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 9
 table noequ0_processEntry23 {
     actions {
         noequ0_processentry23;
@@ -1124,6 +1528,7 @@ table noequ0_processEntry23 {
     size : 1;
 }
 
+// @pragma stage 9
 table Entry23WriteToPacket {
     actions {
         entry23WriteToPacket;
@@ -1132,6 +1537,7 @@ table Entry23WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 9
 table processEntry23andWriteToPacket {
     actions {
         processentry23andWriteToPacket;
@@ -1139,6 +1545,7 @@ table processEntry23andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 9
 table noequ0_processEntry23andWriteToPacket {
     actions {
         noequ0_processentry23andWriteToPacket;
@@ -1146,26 +1553,41 @@ table noequ0_processEntry23andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry23 {
+// @pragma stage 9
+table substituteEntry23 {
     actions {
-        do_cleanEntry23;
+        do_substituteEntry23;
     }
-    default_action : do_cleanEntry23();
+    default_action : do_substituteEntry23();
     size : 1;
 }
 
+// @pragma stage 9
 table processEntry24 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry24;
-        noequ0_processentry24;
+        // noequ0_processentry24;
+        // equ0_processentry24;
+        // noequ0_processentry24andWriteToPacket;
+        processentry24andWriteToPacket;
+        entry24WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry24;
+#endif
     }
-    // default_action : noequ0_processentry24;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 9
 table noequ0_processEntry24 {
     actions {
         noequ0_processentry24;
@@ -1174,6 +1596,7 @@ table noequ0_processEntry24 {
     size : 1;
 }
 
+// @pragma stage 9
 table Entry24WriteToPacket {
     actions {
         entry24WriteToPacket;
@@ -1182,6 +1605,7 @@ table Entry24WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 9
 table processEntry24andWriteToPacket {
     actions {
         processentry24andWriteToPacket;
@@ -1189,6 +1613,7 @@ table processEntry24andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 9
 table noequ0_processEntry24andWriteToPacket {
     actions {
         noequ0_processentry24andWriteToPacket;
@@ -1196,26 +1621,41 @@ table noequ0_processEntry24andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry24 {
+// @pragma stage 9
+table substituteEntry24 {
     actions {
-        do_cleanEntry24;
+        do_substituteEntry24;
     }
-    default_action : do_cleanEntry24();
+    default_action : do_substituteEntry24();
     size : 1;
 }
 
+// @pragma stage 10
 table processEntry25 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry25;
-        noequ0_processentry25;
+        // noequ0_processentry25;
+        // equ0_processentry25;
+        // noequ0_processentry25andWriteToPacket;
+        processentry25andWriteToPacket;
+        entry25WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry25;
+#endif
     }
-    // default_action : noequ0_processentry25;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 10
 table noequ0_processEntry25 {
     actions {
         noequ0_processentry25;
@@ -1224,6 +1664,7 @@ table noequ0_processEntry25 {
     size : 1;
 }
 
+// @pragma stage 10
 table Entry25WriteToPacket {
     actions {
         entry25WriteToPacket;
@@ -1232,6 +1673,7 @@ table Entry25WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 10
 table processEntry25andWriteToPacket {
     actions {
         processentry25andWriteToPacket;
@@ -1239,6 +1681,7 @@ table processEntry25andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 10
 table noequ0_processEntry25andWriteToPacket {
     actions {
         noequ0_processentry25andWriteToPacket;
@@ -1246,26 +1689,41 @@ table noequ0_processEntry25andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry25 {
+// @pragma stage 10
+table substituteEntry25 {
     actions {
-        do_cleanEntry25;
+        do_substituteEntry25;
     }
-    default_action : do_cleanEntry25();
+    default_action : do_substituteEntry25();
     size : 1;
 }
 
+// @pragma stage 10
 table processEntry26 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry26;
-        noequ0_processentry26;
+        // noequ0_processentry26;
+        // equ0_processentry26;
+        // noequ0_processentry26andWriteToPacket;
+        processentry26andWriteToPacket;
+        entry26WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry26;
+#endif
     }
-    // default_action : noequ0_processentry26;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 10
 table noequ0_processEntry26 {
     actions {
         noequ0_processentry26;
@@ -1274,6 +1732,7 @@ table noequ0_processEntry26 {
     size : 1;
 }
 
+// @pragma stage 10
 table Entry26WriteToPacket {
     actions {
         entry26WriteToPacket;
@@ -1282,6 +1741,7 @@ table Entry26WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 10
 table processEntry26andWriteToPacket {
     actions {
         processentry26andWriteToPacket;
@@ -1289,6 +1749,7 @@ table processEntry26andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 10
 table noequ0_processEntry26andWriteToPacket {
     actions {
         noequ0_processentry26andWriteToPacket;
@@ -1296,26 +1757,41 @@ table noequ0_processEntry26andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry26 {
+// @pragma stage 10
+table substituteEntry26 {
     actions {
-        do_cleanEntry26;
+        do_substituteEntry26;
     }
-    default_action : do_cleanEntry26();
+    default_action : do_substituteEntry26();
     size : 1;
 }
 
+// @pragma stage 10
 table processEntry27 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry27;
-        noequ0_processentry27;
+        // noequ0_processentry27;
+        // equ0_processentry27;
+        // noequ0_processentry27andWriteToPacket;
+        processentry27andWriteToPacket;
+        entry27WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry27;
+#endif
     }
-    // default_action : noequ0_processentry27;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 10
 table noequ0_processEntry27 {
     actions {
         noequ0_processentry27;
@@ -1324,6 +1800,7 @@ table noequ0_processEntry27 {
     size : 1;
 }
 
+// @pragma stage 10
 table Entry27WriteToPacket {
     actions {
         entry27WriteToPacket;
@@ -1332,6 +1809,7 @@ table Entry27WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 10
 table processEntry27andWriteToPacket {
     actions {
         processentry27andWriteToPacket;
@@ -1339,6 +1817,7 @@ table processEntry27andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 10
 table noequ0_processEntry27andWriteToPacket {
     actions {
         noequ0_processentry27andWriteToPacket;
@@ -1346,26 +1825,41 @@ table noequ0_processEntry27andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry27 {
+// @pragma stage 10
+table substituteEntry27 {
     actions {
-        do_cleanEntry27;
+        do_substituteEntry27;
     }
-    default_action : do_cleanEntry27();
+    default_action : do_substituteEntry27();
     size : 1;
 }
 
+// @pragma stage 10
 table processEntry28 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry28;
-        noequ0_processentry28;
+        // noequ0_processentry28;
+        // equ0_processentry28;
+        // noequ0_processentry28andWriteToPacket;
+        processentry28andWriteToPacket;
+        entry28WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry28;
+#endif
     }
-    // default_action : noequ0_processentry28;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 10
 table noequ0_processEntry28 {
     actions {
         noequ0_processentry28;
@@ -1374,6 +1868,7 @@ table noequ0_processEntry28 {
     size : 1;
 }
 
+// @pragma stage 10
 table Entry28WriteToPacket {
     actions {
         entry28WriteToPacket;
@@ -1382,6 +1877,7 @@ table Entry28WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 10
 table processEntry28andWriteToPacket {
     actions {
         processentry28andWriteToPacket;
@@ -1389,6 +1885,7 @@ table processEntry28andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 10
 table noequ0_processEntry28andWriteToPacket {
     actions {
         noequ0_processentry28andWriteToPacket;
@@ -1396,26 +1893,41 @@ table noequ0_processEntry28andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry28 {
+// @pragma stage 10
+table substituteEntry28 {
     actions {
-        do_cleanEntry28;
+        do_substituteEntry28;
     }
-    default_action : do_cleanEntry28();
+    default_action : do_substituteEntry28();
     size : 1;
 }
 
+// @pragma stage 11
 table processEntry29 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry29;
-        noequ0_processentry29;
+        // noequ0_processentry29;
+        // equ0_processentry29;
+        // noequ0_processentry29andWriteToPacket;
+        processentry29andWriteToPacket;
+        entry29WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry29;
+#endif
     }
-    // default_action : noequ0_processentry29;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 11
 table noequ0_processEntry29 {
     actions {
         noequ0_processentry29;
@@ -1424,6 +1936,7 @@ table noequ0_processEntry29 {
     size : 1;
 }
 
+// @pragma stage 11
 table Entry29WriteToPacket {
     actions {
         entry29WriteToPacket;
@@ -1432,6 +1945,7 @@ table Entry29WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 11
 table processEntry29andWriteToPacket {
     actions {
         processentry29andWriteToPacket;
@@ -1439,6 +1953,7 @@ table processEntry29andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 11
 table noequ0_processEntry29andWriteToPacket {
     actions {
         noequ0_processentry29andWriteToPacket;
@@ -1446,26 +1961,41 @@ table noequ0_processEntry29andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry29 {
+// @pragma stage 11
+table substituteEntry29 {
     actions {
-        do_cleanEntry29;
+        do_substituteEntry29;
     }
-    default_action : do_cleanEntry29();
+    default_action : do_substituteEntry29();
     size : 1;
 }
 
+// @pragma stage 11
 table processEntry30 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry30;
-        noequ0_processentry30;
+        // noequ0_processentry30;
+        // equ0_processentry30;
+        // noequ0_processentry30andWriteToPacket;
+        processentry30andWriteToPacket;
+        entry30WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry30;
+#endif
     }
-    // default_action : noequ0_processentry30;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 11
 table noequ0_processEntry30 {
     actions {
         noequ0_processentry30;
@@ -1474,6 +2004,7 @@ table noequ0_processEntry30 {
     size : 1;
 }
 
+// @pragma stage 11
 table Entry30WriteToPacket {
     actions {
         entry30WriteToPacket;
@@ -1482,6 +2013,7 @@ table Entry30WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 11
 table processEntry30andWriteToPacket {
     actions {
         processentry30andWriteToPacket;
@@ -1489,6 +2021,7 @@ table processEntry30andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 11
 table noequ0_processEntry30andWriteToPacket {
     actions {
         noequ0_processentry30andWriteToPacket;
@@ -1496,26 +2029,41 @@ table noequ0_processEntry30andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry30 {
+// @pragma stage 11
+table substituteEntry30 {
     actions {
-        do_cleanEntry30;
+        do_substituteEntry30;
     }
-    default_action : do_cleanEntry30();
+    default_action : do_substituteEntry30();
     size : 1;
 }
 
+// @pragma stage 11
 table processEntry31 {
     reads {
-        mdata.bitmap : ternary;
+#ifdef P4ML_LOSS_TOLERATE
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq: ternary;
+#endif
+        mdata.need_aggregate: exact;
+        mdata.need_send_out : exact;
     }
     actions {
         processentry31;
-        noequ0_processentry31;
+        // noequ0_processentry31;
+        // equ0_processentry31;
+        // noequ0_processentry31andWriteToPacket;
+        processentry31andWriteToPacket;
+        entry31WriteToPacket;
+        nop;
+#ifdef P4ML_LOSS_TOLERATE
+        do_substituteEntry31;
+#endif
     }
-    // default_action : noequ0_processentry31;
-    size : 2;
+    default_action : nop();
+    size: 8;
 }
 
+// @pragma stage 11
 table noequ0_processEntry31 {
     actions {
         noequ0_processentry31;
@@ -1524,6 +2072,7 @@ table noequ0_processEntry31 {
     size : 1;
 }
 
+// @pragma stage 11
 table Entry31WriteToPacket {
     actions {
         entry31WriteToPacket;
@@ -1532,6 +2081,7 @@ table Entry31WriteToPacket {
     size : 1;
 }
 
+// @pragma stage 11
 table processEntry31andWriteToPacket {
     actions {
         processentry31andWriteToPacket;
@@ -1539,6 +2089,7 @@ table processEntry31andWriteToPacket {
     size : 1;
 }
 
+// @pragma stage 11
 table noequ0_processEntry31andWriteToPacket {
     actions {
         noequ0_processentry31andWriteToPacket;
@@ -1546,61 +2097,11 @@ table noequ0_processEntry31andWriteToPacket {
     size : 1;
 }
 
-table cleanEntry31 {
+// @pragma stage 11
+table substituteEntry31 {
     actions {
-        do_cleanEntry31;
+        do_substituteEntry31;
     }
-    default_action : do_cleanEntry31();
+    default_action : do_substituteEntry31();
     size : 1;
 }
-
-//table processEntry32 {
-//    actions {
-//        processentry32;
-//    }
-//    default_action : processentry32();
-//    size : 1;
-// /
-
-//tablnoequ0_e processEntry32 {
-//    actions {
-//      noequ0_  processentry32;
-//    }
-//    default_action noequ0_: processentry32();
-//    size : 1;
-//}
-//
-//table Entry32WriteToPacket {
-//    actions {
-//        entry32WriteToPacket;
-//    }
-//    default_action : entry32WriteToPacket();
-//    size : 1;
-//}
-//
-//table processEntry32andWriteToPacket {
-//    default_action : processentry32andWriteToPacket();
-//    size : 1;
-
-//tablnoequ0_e processEntry32andWriteToPacket {
-//    default_action noequ0_: processentry32andWriteToPacket();
-//    size : 1;
-
-//table cleanry3Entry2 {
-// //    actions {
-// /
-// //table processEntry32andWriteToPacket {
-// //    default_action : processentry32andWriteToPacket();
-// //    size : 1;
-
-// //noequ0_tablnoequ0_e processEntry32andWriteToPacket {
-// //    default_action noequ0_: processentry32andWriteToPacket();
-// noequ0_//    size : 1;
-
-// //table cleanry3Entry2 {
-// /
-// /        do_cleanEntry32;
-//    }
-//    default_action : do_cleanEntry32();
-//    size : 1;
-//}

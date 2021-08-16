@@ -253,21 +253,23 @@ register register32 {
     // 32 * 32
 }
 
-// Agg and write to packet
 blackbox stateful_alu write_data_entry1 {
+    reg: register1;
+    // if a new bitmap is coming, clear the reg 
+    condition_lo          : mdata.bitmap == 0;
+    update_lo_1_predicate : condition_lo;
+    update_lo_1_value     : p4ml_entries.data0;
+
+    update_lo_2_predicate : not condition_lo;
+    update_lo_2_value     : register_lo + p4ml_entries.data0;
+}  
+
+// Agg and write to packet
+blackbox stateful_alu equ0_write_data_entry1 {
     reg: register1;
     // if a new bitmap is coming, clear the register
     update_lo_1_value     : p4ml_entries.data0;
 }  
-
-// Write to packet
-blackbox stateful_alu write_read_data_entry1 {
-    reg: register1;
-    update_lo_1_value     :  p4ml_entries.data0;
-
-    output_dst            :  p4ml_entries.data0;
-    output_value          :  alu_lo;
-}
 
 blackbox stateful_alu noequ0_write_data_entry1 {
     reg: register1;
@@ -275,17 +277,35 @@ blackbox stateful_alu noequ0_write_data_entry1 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data0;
 }  
+
+blackbox stateful_alu write_read_data_entry1 {
+    reg: register1;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data0;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data0;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data0;
+    output_value          :  alu_lo;
+}
 
 blackbox stateful_alu noequ0_write_read_data_entry1 {    
     reg: register1;
 
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // update_lo_1_predicate :  condition_lo and condition_hi;
     update_lo_1_value     :  register_lo + p4ml_entries.data0;
     
     output_dst            :  p4ml_entries.data0;
@@ -299,25 +319,31 @@ blackbox stateful_alu read_data_entry1 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry1 {
+blackbox stateful_alu substitute_entry1 {
     reg: register1;
+    
+    update_lo_1_value   :  p4ml_entries.data0;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data0;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry2 {
     reg: register2;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data1;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data1;
 }
 
-blackbox stateful_alu write_read_data_entry2 {
-    reg: register2;
-    
-    update_lo_1_value     :  p4ml_entries.data1;
 
-    output_dst            :  p4ml_entries.data1;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry2 {
+    reg: register2;
+
+    update_lo_1_value     :  p4ml_entries.data1;
 }
 
 blackbox stateful_alu noequ0_write_data_entry2 {
@@ -326,17 +352,35 @@ blackbox stateful_alu noequ0_write_data_entry2 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data1;
+}
+
+blackbox stateful_alu write_read_data_entry2 {
+    reg: register2;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data1;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data1;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data1;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry2 {
     reg: register2;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data1;
     
     output_dst            :  p4ml_entries.data1;
@@ -350,25 +394,31 @@ blackbox stateful_alu read_data_entry2 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry2 {
+blackbox stateful_alu substitute_entry2 {
     reg: register2;
+    
+    update_lo_1_value   :  p4ml_entries.data1;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data1;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry3 {
     reg: register3;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data2;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data2;
 }
 
-blackbox stateful_alu write_read_data_entry3 {
-    reg: register3;
-    
-    update_lo_1_value     :  p4ml_entries.data2;
 
-    output_dst            :  p4ml_entries.data2;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry3 {
+    reg: register3;
+
+    update_lo_1_value     :  p4ml_entries.data2;
 }
 
 blackbox stateful_alu noequ0_write_data_entry3 {
@@ -377,17 +427,35 @@ blackbox stateful_alu noequ0_write_data_entry3 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data2;
+}
+
+blackbox stateful_alu write_read_data_entry3 {
+    reg: register3;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data2;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data2;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data2;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry3 {
     reg: register3;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data2;
     
     output_dst            :  p4ml_entries.data2;
@@ -401,25 +469,31 @@ blackbox stateful_alu read_data_entry3 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry3 {
+blackbox stateful_alu substitute_entry3 {
     reg: register3;
+    
+    update_lo_1_value   :  p4ml_entries.data2;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data2;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry4 {
     reg: register4;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data3;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data3;
 }
 
-blackbox stateful_alu write_read_data_entry4 {
-    reg: register4;
-    
-    update_lo_1_value     :  p4ml_entries.data3;
 
-    output_dst            :  p4ml_entries.data3;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry4 {
+    reg: register4;
+
+    update_lo_1_value     :  p4ml_entries.data3;
 }
 
 blackbox stateful_alu noequ0_write_data_entry4 {
@@ -428,17 +502,35 @@ blackbox stateful_alu noequ0_write_data_entry4 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data3;
+}
+
+blackbox stateful_alu write_read_data_entry4 {
+    reg: register4;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data3;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data3;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data3;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry4 {
     reg: register4;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data3;
     
     output_dst            :  p4ml_entries.data3;
@@ -452,25 +544,31 @@ blackbox stateful_alu read_data_entry4 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry4 {
+blackbox stateful_alu substitute_entry4 {
     reg: register4;
+    
+    update_lo_1_value   :  p4ml_entries.data3;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data3;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry5 {
     reg: register5;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data4;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data4;
 }
 
-blackbox stateful_alu write_read_data_entry5 {
-    reg: register5;
-    
-    update_lo_1_value     :  p4ml_entries.data4;
 
-    output_dst            :  p4ml_entries.data4;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry5 {
+    reg: register5;
+
+    update_lo_1_value     :  p4ml_entries.data4;
 }
 
 blackbox stateful_alu noequ0_write_data_entry5 {
@@ -479,17 +577,35 @@ blackbox stateful_alu noequ0_write_data_entry5 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data4;
+}
+
+blackbox stateful_alu write_read_data_entry5 {
+    reg: register5;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data4;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data4;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data4;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry5 {
     reg: register5;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data4;
     
     output_dst            :  p4ml_entries.data4;
@@ -503,25 +619,31 @@ blackbox stateful_alu read_data_entry5 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry5 {
+blackbox stateful_alu substitute_entry5 {
     reg: register5;
+    
+    update_lo_1_value   :  p4ml_entries.data4;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data4;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry6 {
     reg: register6;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data5;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data5;
 }
 
-blackbox stateful_alu write_read_data_entry6 {
-    reg: register6;
-    
-    update_lo_1_value     :  p4ml_entries.data5;
 
-    output_dst            :  p4ml_entries.data5;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry6 {
+    reg: register6;
+
+    update_lo_1_value     :  p4ml_entries.data5;
 }
 
 blackbox stateful_alu noequ0_write_data_entry6 {
@@ -530,17 +652,35 @@ blackbox stateful_alu noequ0_write_data_entry6 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data5;
+}
+
+blackbox stateful_alu write_read_data_entry6 {
+    reg: register6;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data5;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data5;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data5;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry6 {
     reg: register6;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data5;
     
     output_dst            :  p4ml_entries.data5;
@@ -554,25 +694,31 @@ blackbox stateful_alu read_data_entry6 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry6 {
+blackbox stateful_alu substitute_entry6 {
     reg: register6;
+    
+    update_lo_1_value   :  p4ml_entries.data5;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data5;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry7 {
     reg: register7;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data6;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data6;
 }
 
-blackbox stateful_alu write_read_data_entry7 {
-    reg: register7;
-    
-    update_lo_1_value     :  p4ml_entries.data6;
 
-    output_dst            :  p4ml_entries.data6;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry7 {
+    reg: register7;
+
+    update_lo_1_value     :  p4ml_entries.data6;
 }
 
 blackbox stateful_alu noequ0_write_data_entry7 {
@@ -581,17 +727,35 @@ blackbox stateful_alu noequ0_write_data_entry7 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data6;
+}
+
+blackbox stateful_alu write_read_data_entry7 {
+    reg: register7;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data6;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data6;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data6;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry7 {
     reg: register7;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data6;
     
     output_dst            :  p4ml_entries.data6;
@@ -605,25 +769,31 @@ blackbox stateful_alu read_data_entry7 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry7 {
+blackbox stateful_alu substitute_entry7 {
     reg: register7;
+    
+    update_lo_1_value   :  p4ml_entries.data6;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data6;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry8 {
     reg: register8;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data7;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data7;
 }
 
-blackbox stateful_alu write_read_data_entry8 {
-    reg: register8;
-    
-    update_lo_1_value     :  p4ml_entries.data7;
 
-    output_dst            :  p4ml_entries.data7;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry8 {
+    reg: register8;
+
+    update_lo_1_value     :  p4ml_entries.data7;
 }
 
 blackbox stateful_alu noequ0_write_data_entry8 {
@@ -632,17 +802,35 @@ blackbox stateful_alu noequ0_write_data_entry8 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data7;
+}
+
+blackbox stateful_alu write_read_data_entry8 {
+    reg: register8;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data7;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data7;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data7;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry8 {
     reg: register8;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data7;
     
     output_dst            :  p4ml_entries.data7;
@@ -656,25 +844,31 @@ blackbox stateful_alu read_data_entry8 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry8 {
+blackbox stateful_alu substitute_entry8 {
     reg: register8;
+    
+    update_lo_1_value   :  p4ml_entries.data7;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data7;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry9 {
     reg: register9;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data8;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data8;
 }
 
-blackbox stateful_alu write_read_data_entry9 {
-    reg: register9;
-    
-    update_lo_1_value     :  p4ml_entries.data8;
 
-    output_dst            :  p4ml_entries.data8;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry9 {
+    reg: register9;
+
+    update_lo_1_value     :  p4ml_entries.data8;
 }
 
 blackbox stateful_alu noequ0_write_data_entry9 {
@@ -683,17 +877,35 @@ blackbox stateful_alu noequ0_write_data_entry9 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data8;
+}
+
+blackbox stateful_alu write_read_data_entry9 {
+    reg: register9;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data8;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data8;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data8;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry9 {
     reg: register9;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data8;
     
     output_dst            :  p4ml_entries.data8;
@@ -707,25 +919,31 @@ blackbox stateful_alu read_data_entry9 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry9 {
+blackbox stateful_alu substitute_entry9 {
     reg: register9;
+    
+    update_lo_1_value   :  p4ml_entries.data8;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data8;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry10 {
     reg: register10;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data9;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data9;
 }
 
-blackbox stateful_alu write_read_data_entry10 {
-    reg: register10;
-    
-    update_lo_1_value     :  p4ml_entries.data9;
 
-    output_dst            :  p4ml_entries.data9;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry10 {
+    reg: register10;
+
+    update_lo_1_value     :  p4ml_entries.data9;
 }
 
 blackbox stateful_alu noequ0_write_data_entry10 {
@@ -734,17 +952,35 @@ blackbox stateful_alu noequ0_write_data_entry10 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data9;
+}
+
+blackbox stateful_alu write_read_data_entry10 {
+    reg: register10;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data9;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data9;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data9;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry10 {
     reg: register10;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data9;
     
     output_dst            :  p4ml_entries.data9;
@@ -758,25 +994,31 @@ blackbox stateful_alu read_data_entry10 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry10 {
+blackbox stateful_alu substitute_entry10 {
     reg: register10;
+    
+    update_lo_1_value   :  p4ml_entries.data9;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data9;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry11 {
     reg: register11;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data10;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data10;
 }
 
-blackbox stateful_alu write_read_data_entry11 {
-    reg: register11;
-    
-    update_lo_1_value     :  p4ml_entries.data10;
 
-    output_dst            :  p4ml_entries.data10;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry11 {
+    reg: register11;
+
+    update_lo_1_value     :  p4ml_entries.data10;
 }
 
 blackbox stateful_alu noequ0_write_data_entry11 {
@@ -785,17 +1027,35 @@ blackbox stateful_alu noequ0_write_data_entry11 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data10;
+}
+
+blackbox stateful_alu write_read_data_entry11 {
+    reg: register11;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data10;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data10;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data10;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry11 {
     reg: register11;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data10;
     
     output_dst            :  p4ml_entries.data10;
@@ -809,25 +1069,31 @@ blackbox stateful_alu read_data_entry11 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry11 {
+blackbox stateful_alu substitute_entry11 {
     reg: register11;
+    
+    update_lo_1_value   :  p4ml_entries.data10;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data10;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry12 {
     reg: register12;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data11;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data11;
 }
 
-blackbox stateful_alu write_read_data_entry12 {
-    reg: register12;
-    
-    update_lo_1_value     :  p4ml_entries.data11;
 
-    output_dst            :  p4ml_entries.data11;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry12 {
+    reg: register12;
+
+    update_lo_1_value     :  p4ml_entries.data11;
 }
 
 blackbox stateful_alu noequ0_write_data_entry12 {
@@ -836,17 +1102,35 @@ blackbox stateful_alu noequ0_write_data_entry12 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data11;
+}
+
+blackbox stateful_alu write_read_data_entry12 {
+    reg: register12;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data11;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data11;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data11;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry12 {
     reg: register12;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data11;
     
     output_dst            :  p4ml_entries.data11;
@@ -860,25 +1144,31 @@ blackbox stateful_alu read_data_entry12 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry12 {
+blackbox stateful_alu substitute_entry12 {
     reg: register12;
+    
+    update_lo_1_value   :  p4ml_entries.data11;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data11;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry13 {
     reg: register13;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data12;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data12;
 }
 
-blackbox stateful_alu write_read_data_entry13 {
-    reg: register13;
-    
-    update_lo_1_value     :  p4ml_entries.data12;
 
-    output_dst            :  p4ml_entries.data12;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry13 {
+    reg: register13;
+
+    update_lo_1_value     :  p4ml_entries.data12;
 }
 
 blackbox stateful_alu noequ0_write_data_entry13 {
@@ -887,17 +1177,35 @@ blackbox stateful_alu noequ0_write_data_entry13 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data12;
+}
+
+blackbox stateful_alu write_read_data_entry13 {
+    reg: register13;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data12;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data12;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data12;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry13 {
     reg: register13;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data12;
     
     output_dst            :  p4ml_entries.data12;
@@ -911,25 +1219,31 @@ blackbox stateful_alu read_data_entry13 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry13 {
+blackbox stateful_alu substitute_entry13 {
     reg: register13;
+    
+    update_lo_1_value   :  p4ml_entries.data12;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data12;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry14 {
     reg: register14;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data13;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data13;
 }
 
-blackbox stateful_alu write_read_data_entry14 {
-    reg: register14;
-    
-    update_lo_1_value     :  p4ml_entries.data13;
 
-    output_dst            :  p4ml_entries.data13;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry14 {
+    reg: register14;
+
+    update_lo_1_value     :  p4ml_entries.data13;
 }
 
 blackbox stateful_alu noequ0_write_data_entry14 {
@@ -938,17 +1252,35 @@ blackbox stateful_alu noequ0_write_data_entry14 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data13;
+}
+
+blackbox stateful_alu write_read_data_entry14 {
+    reg: register14;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data13;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data13;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data13;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry14 {
     reg: register14;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data13;
     
     output_dst            :  p4ml_entries.data13;
@@ -962,25 +1294,31 @@ blackbox stateful_alu read_data_entry14 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry14 {
+blackbox stateful_alu substitute_entry14 {
     reg: register14;
+    
+    update_lo_1_value   :  p4ml_entries.data13;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data13;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry15 {
     reg: register15;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data14;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data14;
 }
 
-blackbox stateful_alu write_read_data_entry15 {
-    reg: register15;
-    
-    update_lo_1_value     :  p4ml_entries.data14;
 
-    output_dst            :  p4ml_entries.data14;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry15 {
+    reg: register15;
+
+    update_lo_1_value     :  p4ml_entries.data14;
 }
 
 blackbox stateful_alu noequ0_write_data_entry15 {
@@ -989,17 +1327,35 @@ blackbox stateful_alu noequ0_write_data_entry15 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data14;
+}
+
+blackbox stateful_alu write_read_data_entry15 {
+    reg: register15;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data14;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data14;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data14;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry15 {
     reg: register15;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data14;
     
     output_dst            :  p4ml_entries.data14;
@@ -1013,25 +1369,31 @@ blackbox stateful_alu read_data_entry15 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry15 {
+blackbox stateful_alu substitute_entry15 {
     reg: register15;
+    
+    update_lo_1_value   :  p4ml_entries.data14;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data14;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry16 {
     reg: register16;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data15;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data15;
 }
 
-blackbox stateful_alu write_read_data_entry16 {
-    reg: register16;
-    
-    update_lo_1_value     :  p4ml_entries.data15;
 
-    output_dst            :  p4ml_entries.data15;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry16 {
+    reg: register16;
+
+    update_lo_1_value     :  p4ml_entries.data15;
 }
 
 blackbox stateful_alu noequ0_write_data_entry16 {
@@ -1040,17 +1402,35 @@ blackbox stateful_alu noequ0_write_data_entry16 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data15;
+}
+
+blackbox stateful_alu write_read_data_entry16 {
+    reg: register16;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data15;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data15;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data15;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry16 {
     reg: register16;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data15;
     
     output_dst            :  p4ml_entries.data15;
@@ -1064,25 +1444,31 @@ blackbox stateful_alu read_data_entry16 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry16 {
+blackbox stateful_alu substitute_entry16 {
     reg: register16;
+    
+    update_lo_1_value   :  p4ml_entries.data15;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data15;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry17 {
     reg: register17;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data16;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data16;
 }
 
-blackbox stateful_alu write_read_data_entry17 {
-    reg: register17;
-    
-    update_lo_1_value     :  p4ml_entries.data16;
 
-    output_dst            :  p4ml_entries.data16;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry17 {
+    reg: register17;
+
+    update_lo_1_value     :  p4ml_entries.data16;
 }
 
 blackbox stateful_alu noequ0_write_data_entry17 {
@@ -1091,17 +1477,35 @@ blackbox stateful_alu noequ0_write_data_entry17 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data16;
+}
+
+blackbox stateful_alu write_read_data_entry17 {
+    reg: register17;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data16;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data16;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data16;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry17 {
     reg: register17;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data16;
     
     output_dst            :  p4ml_entries.data16;
@@ -1115,25 +1519,31 @@ blackbox stateful_alu read_data_entry17 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry17 {
+blackbox stateful_alu substitute_entry17 {
     reg: register17;
+    
+    update_lo_1_value   :  p4ml_entries.data16;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data16;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry18 {
     reg: register18;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data17;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data17;
 }
 
-blackbox stateful_alu write_read_data_entry18 {
-    reg: register18;
-    
-    update_lo_1_value     :  p4ml_entries.data17;
 
-    output_dst            :  p4ml_entries.data17;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry18 {
+    reg: register18;
+
+    update_lo_1_value     :  p4ml_entries.data17;
 }
 
 blackbox stateful_alu noequ0_write_data_entry18 {
@@ -1142,17 +1552,35 @@ blackbox stateful_alu noequ0_write_data_entry18 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data17;
+}
+
+blackbox stateful_alu write_read_data_entry18 {
+    reg: register18;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data17;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data17;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data17;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry18 {
     reg: register18;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data17;
     
     output_dst            :  p4ml_entries.data17;
@@ -1166,25 +1594,31 @@ blackbox stateful_alu read_data_entry18 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry18 {
+blackbox stateful_alu substitute_entry18 {
     reg: register18;
+    
+    update_lo_1_value   :  p4ml_entries.data17;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data17;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry19 {
     reg: register19;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data18;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data18;
 }
 
-blackbox stateful_alu write_read_data_entry19 {
-    reg: register19;
-    
-    update_lo_1_value     :  p4ml_entries.data18;
 
-    output_dst            :  p4ml_entries.data18;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry19 {
+    reg: register19;
+
+    update_lo_1_value     :  p4ml_entries.data18;
 }
 
 blackbox stateful_alu noequ0_write_data_entry19 {
@@ -1193,17 +1627,35 @@ blackbox stateful_alu noequ0_write_data_entry19 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data18;
+}
+
+blackbox stateful_alu write_read_data_entry19 {
+    reg: register19;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data18;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data18;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data18;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry19 {
     reg: register19;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data18;
     
     output_dst            :  p4ml_entries.data18;
@@ -1217,25 +1669,31 @@ blackbox stateful_alu read_data_entry19 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry19 {
+blackbox stateful_alu substitute_entry19 {
     reg: register19;
+    
+    update_lo_1_value   :  p4ml_entries.data18;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data18;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry20 {
     reg: register20;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data19;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data19;
 }
 
-blackbox stateful_alu write_read_data_entry20 {
-    reg: register20;
-    
-    update_lo_1_value     :  p4ml_entries.data19;
 
-    output_dst            :  p4ml_entries.data19;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry20 {
+    reg: register20;
+
+    update_lo_1_value     :  p4ml_entries.data19;
 }
 
 blackbox stateful_alu noequ0_write_data_entry20 {
@@ -1244,17 +1702,35 @@ blackbox stateful_alu noequ0_write_data_entry20 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data19;
+}
+
+blackbox stateful_alu write_read_data_entry20 {
+    reg: register20;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data19;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data19;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data19;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry20 {
     reg: register20;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data19;
     
     output_dst            :  p4ml_entries.data19;
@@ -1268,25 +1744,31 @@ blackbox stateful_alu read_data_entry20 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry20 {
+blackbox stateful_alu substitute_entry20 {
     reg: register20;
+    
+    update_lo_1_value   :  p4ml_entries.data19;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data19;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry21 {
     reg: register21;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data20;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data20;
 }
 
-blackbox stateful_alu write_read_data_entry21 {
-    reg: register21;
-    
-    update_lo_1_value     :  p4ml_entries.data20;
 
-    output_dst            :  p4ml_entries.data20;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry21 {
+    reg: register21;
+
+    update_lo_1_value     :  p4ml_entries.data20;
 }
 
 blackbox stateful_alu noequ0_write_data_entry21 {
@@ -1295,17 +1777,35 @@ blackbox stateful_alu noequ0_write_data_entry21 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data20;
+}
+
+blackbox stateful_alu write_read_data_entry21 {
+    reg: register21;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data20;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data20;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data20;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry21 {
     reg: register21;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data20;
     
     output_dst            :  p4ml_entries.data20;
@@ -1319,25 +1819,31 @@ blackbox stateful_alu read_data_entry21 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry21 {
+blackbox stateful_alu substitute_entry21 {
     reg: register21;
+    
+    update_lo_1_value   :  p4ml_entries.data20;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data20;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry22 {
     reg: register22;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data21;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data21;
 }
 
-blackbox stateful_alu write_read_data_entry22 {
-    reg: register22;
-    
-    update_lo_1_value     :  p4ml_entries.data21;
 
-    output_dst            :  p4ml_entries.data21;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry22 {
+    reg: register22;
+
+    update_lo_1_value     :  p4ml_entries.data21;
 }
 
 blackbox stateful_alu noequ0_write_data_entry22 {
@@ -1346,17 +1852,35 @@ blackbox stateful_alu noequ0_write_data_entry22 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data21;
+}
+
+blackbox stateful_alu write_read_data_entry22 {
+    reg: register22;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data21;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data21;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data21;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry22 {
     reg: register22;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data21;
     
     output_dst            :  p4ml_entries.data21;
@@ -1370,25 +1894,31 @@ blackbox stateful_alu read_data_entry22 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry22 {
+blackbox stateful_alu substitute_entry22 {
     reg: register22;
+    
+    update_lo_1_value   :  p4ml_entries.data21;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data21;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry23 {
     reg: register23;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data22;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data22;
 }
 
-blackbox stateful_alu write_read_data_entry23 {
-    reg: register23;
-    
-    update_lo_1_value     :  p4ml_entries.data22;
 
-    output_dst            :  p4ml_entries.data22;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry23 {
+    reg: register23;
+
+    update_lo_1_value     :  p4ml_entries.data22;
 }
 
 blackbox stateful_alu noequ0_write_data_entry23 {
@@ -1397,17 +1927,35 @@ blackbox stateful_alu noequ0_write_data_entry23 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data22;
+}
+
+blackbox stateful_alu write_read_data_entry23 {
+    reg: register23;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data22;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data22;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data22;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry23 {
     reg: register23;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data22;
     
     output_dst            :  p4ml_entries.data22;
@@ -1421,25 +1969,31 @@ blackbox stateful_alu read_data_entry23 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry23 {
+blackbox stateful_alu substitute_entry23 {
     reg: register23;
+    
+    update_lo_1_value   :  p4ml_entries.data22;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data22;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry24 {
     reg: register24;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data23;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data23;
 }
 
-blackbox stateful_alu write_read_data_entry24 {
-    reg: register24;
-    
-    update_lo_1_value     :  p4ml_entries.data23;
 
-    output_dst            :  p4ml_entries.data23;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry24 {
+    reg: register24;
+
+    update_lo_1_value     :  p4ml_entries.data23;
 }
 
 blackbox stateful_alu noequ0_write_data_entry24 {
@@ -1448,17 +2002,35 @@ blackbox stateful_alu noequ0_write_data_entry24 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data23;
+}
+
+blackbox stateful_alu write_read_data_entry24 {
+    reg: register24;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data23;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data23;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data23;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry24 {
     reg: register24;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data23;
     
     output_dst            :  p4ml_entries.data23;
@@ -1472,25 +2044,31 @@ blackbox stateful_alu read_data_entry24 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry24 {
+blackbox stateful_alu substitute_entry24 {
     reg: register24;
+    
+    update_lo_1_value   :  p4ml_entries.data23;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data23;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry25 {
     reg: register25;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data24;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data24;
 }
 
-blackbox stateful_alu write_read_data_entry25 {
-    reg: register25;
-    
-    update_lo_1_value     :  p4ml_entries.data24;
 
-    output_dst            :  p4ml_entries.data24;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry25 {
+    reg: register25;
+
+    update_lo_1_value     :  p4ml_entries.data24;
 }
 
 blackbox stateful_alu noequ0_write_data_entry25 {
@@ -1499,17 +2077,35 @@ blackbox stateful_alu noequ0_write_data_entry25 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data24;
+}
+
+blackbox stateful_alu write_read_data_entry25 {
+    reg: register25;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data24;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data24;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data24;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry25 {
     reg: register25;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data24;
     
     output_dst            :  p4ml_entries.data24;
@@ -1523,25 +2119,31 @@ blackbox stateful_alu read_data_entry25 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry25 {
+blackbox stateful_alu substitute_entry25 {
     reg: register25;
+    
+    update_lo_1_value   :  p4ml_entries.data24;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data24;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry26 {
     reg: register26;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data25;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data25;
 }
 
-blackbox stateful_alu write_read_data_entry26 {
-    reg: register26;
-    
-    update_lo_1_value     :  p4ml_entries.data25;
 
-    output_dst            :  p4ml_entries.data25;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry26 {
+    reg: register26;
+
+    update_lo_1_value     :  p4ml_entries.data25;
 }
 
 blackbox stateful_alu noequ0_write_data_entry26 {
@@ -1550,17 +2152,35 @@ blackbox stateful_alu noequ0_write_data_entry26 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data25;
+}
+
+blackbox stateful_alu write_read_data_entry26 {
+    reg: register26;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data25;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data25;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data25;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry26 {
     reg: register26;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data25;
     
     output_dst            :  p4ml_entries.data25;
@@ -1574,25 +2194,31 @@ blackbox stateful_alu read_data_entry26 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry26 {
+blackbox stateful_alu substitute_entry26 {
     reg: register26;
+    
+    update_lo_1_value   :  p4ml_entries.data25;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data25;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry27 {
     reg: register27;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data26;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data26;
 }
 
-blackbox stateful_alu write_read_data_entry27 {
-    reg: register27;
-    
-    update_lo_1_value     :  p4ml_entries.data26;
 
-    output_dst            :  p4ml_entries.data26;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry27 {
+    reg: register27;
+
+    update_lo_1_value     :  p4ml_entries.data26;
 }
 
 blackbox stateful_alu noequ0_write_data_entry27 {
@@ -1601,17 +2227,35 @@ blackbox stateful_alu noequ0_write_data_entry27 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data26;
+}
+
+blackbox stateful_alu write_read_data_entry27 {
+    reg: register27;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data26;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data26;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data26;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry27 {
     reg: register27;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data26;
     
     output_dst            :  p4ml_entries.data26;
@@ -1625,25 +2269,31 @@ blackbox stateful_alu read_data_entry27 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry27 {
+blackbox stateful_alu substitute_entry27 {
     reg: register27;
+    
+    update_lo_1_value   :  p4ml_entries.data26;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data26;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry28 {
     reg: register28;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data27;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data27;
 }
 
-blackbox stateful_alu write_read_data_entry28 {
-    reg: register28;
-    
-    update_lo_1_value     :  p4ml_entries.data27;
 
-    output_dst            :  p4ml_entries.data27;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry28 {
+    reg: register28;
+
+    update_lo_1_value     :  p4ml_entries.data27;
 }
 
 blackbox stateful_alu noequ0_write_data_entry28 {
@@ -1652,17 +2302,35 @@ blackbox stateful_alu noequ0_write_data_entry28 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data27;
+}
+
+blackbox stateful_alu write_read_data_entry28 {
+    reg: register28;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data27;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data27;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data27;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry28 {
     reg: register28;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data27;
     
     output_dst            :  p4ml_entries.data27;
@@ -1676,25 +2344,31 @@ blackbox stateful_alu read_data_entry28 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry28 {
+blackbox stateful_alu substitute_entry28 {
     reg: register28;
+    
+    update_lo_1_value   :  p4ml_entries.data27;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data27;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry29 {
     reg: register29;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data28;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data28;
 }
 
-blackbox stateful_alu write_read_data_entry29 {
-    reg: register29;
-    
-    update_lo_1_value     :  p4ml_entries.data28;
 
-    output_dst            :  p4ml_entries.data28;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry29 {
+    reg: register29;
+
+    update_lo_1_value     :  p4ml_entries.data28;
 }
 
 blackbox stateful_alu noequ0_write_data_entry29 {
@@ -1703,17 +2377,35 @@ blackbox stateful_alu noequ0_write_data_entry29 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data28;
+}
+
+blackbox stateful_alu write_read_data_entry29 {
+    reg: register29;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data28;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data28;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data28;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry29 {
     reg: register29;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data28;
     
     output_dst            :  p4ml_entries.data28;
@@ -1727,25 +2419,31 @@ blackbox stateful_alu read_data_entry29 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry29 {
+blackbox stateful_alu substitute_entry29 {
     reg: register29;
+    
+    update_lo_1_value   :  p4ml_entries.data28;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data28;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry30 {
     reg: register30;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data29;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data29;
 }
 
-blackbox stateful_alu write_read_data_entry30 {
-    reg: register30;
-    
-    update_lo_1_value     :  p4ml_entries.data29;
 
-    output_dst            :  p4ml_entries.data29;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry30 {
+    reg: register30;
+
+    update_lo_1_value     :  p4ml_entries.data29;
 }
 
 blackbox stateful_alu noequ0_write_data_entry30 {
@@ -1754,17 +2452,35 @@ blackbox stateful_alu noequ0_write_data_entry30 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data29;
+}
+
+blackbox stateful_alu write_read_data_entry30 {
+    reg: register30;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data29;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data29;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data29;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry30 {
     reg: register30;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data29;
     
     output_dst            :  p4ml_entries.data29;
@@ -1778,25 +2494,31 @@ blackbox stateful_alu read_data_entry30 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry30 {
+blackbox stateful_alu substitute_entry30 {
     reg: register30;
+    
+    update_lo_1_value   :  p4ml_entries.data29;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data29;
+    output_value        :  register_lo;
 }
 
 blackbox stateful_alu write_data_entry31 {
     reg: register31;
 
+    condition_lo          :  mdata.bitmap == 0;
+    update_lo_1_predicate :  condition_lo;
     update_lo_1_value     :  p4ml_entries.data30;
+
+    update_lo_2_predicate :  not condition_lo;
+    update_lo_2_value     :  register_lo + p4ml_entries.data30;
 }
 
-blackbox stateful_alu write_read_data_entry31 {
-    reg: register31;
-    
-    update_lo_1_value     :  p4ml_entries.data30;
 
-    output_dst            :  p4ml_entries.data30;
-    output_value          :  alu_lo;
+blackbox stateful_alu equ0_write_data_entry31 {
+    reg: register31;
+
+    update_lo_1_value     :  p4ml_entries.data30;
 }
 
 blackbox stateful_alu noequ0_write_data_entry31 {
@@ -1805,17 +2527,35 @@ blackbox stateful_alu noequ0_write_data_entry31 {
     condition_hi          :  register_lo < 2147483647;
     condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    update_lo_1_predicate : condition_lo and condition_hi;
     update_lo_1_value     : register_lo + p4ml_entries.data30;
+}
+
+blackbox stateful_alu write_read_data_entry31 {
+    reg: register31;
+
+    condition_lo          :  mdata.bitmap == 0;    
+    
+    update_lo_1_predicate :  not condition_lo;
+    update_lo_1_value     :  register_lo + p4ml_entries.data30;
+    
+    update_lo_2_predicate :  condition_lo;
+    update_lo_2_value     :  p4ml_entries.data30;
+    
+    // If Switch bitmap = 0, need to be aggregated & need to be send,
+    // register value is useless.
+    
+    output_dst            :  p4ml_entries.data30;
+    output_value          :  alu_lo;
 }
 
 blackbox stateful_alu noequ0_write_read_data_entry31 {
     reg: register31;
-    
-    condition_hi          :  register_lo < 2147483647;
-    condition_lo          :  register_lo > -2147483647;
 
-    update_lo_1_predicate :  condition_lo and condition_hi;
+    // condition_hi          :  register_lo < 2147483647;
+    // condition_lo          :  register_lo > -2147483647;
+
+    // update_lo_1_predicate :  condition_lo and condition_hi;    
     update_lo_1_value     :  register_lo + p4ml_entries.data30;
     
     output_dst            :  p4ml_entries.data30;
@@ -1829,58 +2569,11 @@ blackbox stateful_alu read_data_entry31 {
     output_value        :  register_lo;
 }
 
-blackbox stateful_alu clean_entry31 {
+blackbox stateful_alu substitute_entry31 {
     reg: register31;
+    
+    update_lo_1_value   :  p4ml_entries.data30;
 
-    update_lo_1_value  :  0;
+    output_dst          :  p4ml_entries.data30;
+    output_value        :  register_lo;
 }
-
-//blackbox stateful_alu write_data_entry32 {
-//    reg: register32;
-//
-//    update_lo_1_value     :  p4ml_entries.data31;
-//}
-//
-//blackbox stateful_alu write_read_data_entry32 {
-//    reg: register32;
-//    
-//    update_lo_1_value     :  p4ml_entries.data31;
-//
-//    output_dst            :  p4ml_entries.data31;
-//    output_value          :  alu_lo;
-//}
-//
-// blackbox stateful_alu write_data_ennoequ0_try32 {
-//    reg: register32;
-// //
-//     condition_hi          :  register_lo < 2147483647;
-//     condition_lo          :  register_lo > -2147483647;
-
-//     update_lo_1_predicate :  condition_lo and condition_hi;
-// //    update_lo_1_predicate : not condition_lo;
-// //}
-// //
-// //blackbox stateful_alu write_read_data_entry32 noequ0_   reg: registerequ0_32;
-// //    
-// // /
-//     condition_hi          :  register_lo < 2147483647;
-//     condition_lo          :  register_lo > -2147483647;
-
-//     update_lo_1_predicate :  condition_lo and condition_hi;
-//    update_lo_1_value     :  register_lo + p4ml_entries.data31;
-//    
-//    output_dst            :  p4ml_entries.data31;
-//    output_value          :  alu_lo;
-//}
-//
-//blackbox stateful_alu read_data_entry32 {
-//    reg: register32;
-//
-//    output_dst          :  p4ml_entries.data31;
-//    output_value        clean_entry
-// blackbox stateful_alu read_data_entry32 {
-//    reg: upvalue_p;
-//    output_value        :  register_lo;
-//}
-
-//}

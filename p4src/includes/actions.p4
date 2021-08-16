@@ -2,6 +2,10 @@ action processentry1() {
     write_data_entry1.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
+action equ0_processentry1() {
+    equ0_write_data_entry1.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
 action noequ0_processentry1() {
     noequ0_write_data_entry1.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
@@ -14,8 +18,8 @@ action noequ0_processentry1andWriteToPacket() {
     noequ0_write_read_data_entry1.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry1() {
-    clean_entry1.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry1() {
+    substitute_entry1.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry1WriteToPacket() {
@@ -24,6 +28,10 @@ action entry1WriteToPacket() {
 
 action processentry2() {
     write_data_entry2.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry2() {
+    equ0_write_data_entry2.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry2() {
@@ -38,8 +46,8 @@ action noequ0_processentry2andWriteToPacket() {
     noequ0_write_read_data_entry2.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry2() {
-    clean_entry2.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry2() {
+    substitute_entry2.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry2WriteToPacket() {
@@ -48,6 +56,10 @@ action entry2WriteToPacket() {
 
 action processentry3() {
     write_data_entry3.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry3() {
+    equ0_write_data_entry3.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry3() {
@@ -62,8 +74,8 @@ action noequ0_processentry3andWriteToPacket() {
     noequ0_write_read_data_entry3.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry3() {
-    clean_entry3.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry3() {
+    substitute_entry3.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry3WriteToPacket() {
@@ -72,6 +84,10 @@ action entry3WriteToPacket() {
 
 action processentry4() {
     write_data_entry4.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry4() {
+    equ0_write_data_entry4.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry4() {
@@ -86,8 +102,8 @@ action noequ0_processentry4andWriteToPacket() {
     noequ0_write_read_data_entry4.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry4() {
-    clean_entry4.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry4() {
+    substitute_entry4.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry4WriteToPacket() {
@@ -96,6 +112,10 @@ action entry4WriteToPacket() {
 
 action processentry5() {
     write_data_entry5.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry5() {
+    equ0_write_data_entry5.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry5() {
@@ -110,8 +130,8 @@ action noequ0_processentry5andWriteToPacket() {
     noequ0_write_read_data_entry5.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry5() {
-    clean_entry5.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry5() {
+    substitute_entry5.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry5WriteToPacket() {
@@ -120,6 +140,10 @@ action entry5WriteToPacket() {
 
 action processentry6() {
     write_data_entry6.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry6() {
+    equ0_write_data_entry6.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry6() {
@@ -134,8 +158,8 @@ action noequ0_processentry6andWriteToPacket() {
     noequ0_write_read_data_entry6.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry6() {
-    clean_entry6.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry6() {
+    substitute_entry6.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry6WriteToPacket() {
@@ -144,6 +168,10 @@ action entry6WriteToPacket() {
 
 action processentry7() {
     write_data_entry7.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry7() {
+    equ0_write_data_entry7.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry7() {
@@ -158,8 +186,8 @@ action noequ0_processentry7andWriteToPacket() {
     noequ0_write_read_data_entry7.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry7() {
-    clean_entry7.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry7() {
+    substitute_entry7.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry7WriteToPacket() {
@@ -168,6 +196,10 @@ action entry7WriteToPacket() {
 
 action processentry8() {
     write_data_entry8.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry8() {
+    equ0_write_data_entry8.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry8() {
@@ -182,8 +214,8 @@ action noequ0_processentry8andWriteToPacket() {
     noequ0_write_read_data_entry8.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry8() {
-    clean_entry8.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry8() {
+    substitute_entry8.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry8WriteToPacket() {
@@ -192,6 +224,10 @@ action entry8WriteToPacket() {
 
 action processentry9() {
     write_data_entry9.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry9() {
+    equ0_write_data_entry9.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry9() {
@@ -206,8 +242,8 @@ action noequ0_processentry9andWriteToPacket() {
     noequ0_write_read_data_entry9.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry9() {
-    clean_entry9.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry9() {
+    substitute_entry9.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry9WriteToPacket() {
@@ -216,6 +252,10 @@ action entry9WriteToPacket() {
 
 action processentry10() {
     write_data_entry10.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry10() {
+    equ0_write_data_entry10.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry10() {
@@ -230,8 +270,8 @@ action noequ0_processentry10andWriteToPacket() {
     noequ0_write_read_data_entry10.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry10() {
-    clean_entry10.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry10() {
+    substitute_entry10.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry10WriteToPacket() {
@@ -240,6 +280,10 @@ action entry10WriteToPacket() {
 
 action processentry11() {
     write_data_entry11.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry11() {
+    equ0_write_data_entry11.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry11() {
@@ -254,8 +298,8 @@ action noequ0_processentry11andWriteToPacket() {
     noequ0_write_read_data_entry11.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry11() {
-    clean_entry11.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry11() {
+    substitute_entry11.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry11WriteToPacket() {
@@ -264,6 +308,10 @@ action entry11WriteToPacket() {
 
 action processentry12() {
     write_data_entry12.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry12() {
+    equ0_write_data_entry12.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry12() {
@@ -278,8 +326,8 @@ action noequ0_processentry12andWriteToPacket() {
     noequ0_write_read_data_entry12.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry12() {
-    clean_entry12.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry12() {
+    substitute_entry12.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry12WriteToPacket() {
@@ -288,6 +336,10 @@ action entry12WriteToPacket() {
 
 action processentry13() {
     write_data_entry13.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry13() {
+    equ0_write_data_entry13.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry13() {
@@ -302,8 +354,8 @@ action noequ0_processentry13andWriteToPacket() {
     noequ0_write_read_data_entry13.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry13() {
-    clean_entry13.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry13() {
+    substitute_entry13.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry13WriteToPacket() {
@@ -312,6 +364,10 @@ action entry13WriteToPacket() {
 
 action processentry14() {
     write_data_entry14.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry14() {
+    equ0_write_data_entry14.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry14() {
@@ -326,8 +382,8 @@ action noequ0_processentry14andWriteToPacket() {
     noequ0_write_read_data_entry14.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry14() {
-    clean_entry14.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry14() {
+    substitute_entry14.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry14WriteToPacket() {
@@ -336,6 +392,10 @@ action entry14WriteToPacket() {
 
 action processentry15() {
     write_data_entry15.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry15() {
+    equ0_write_data_entry15.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry15() {
@@ -350,8 +410,8 @@ action noequ0_processentry15andWriteToPacket() {
     noequ0_write_read_data_entry15.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry15() {
-    clean_entry15.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry15() {
+    substitute_entry15.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry15WriteToPacket() {
@@ -360,6 +420,10 @@ action entry15WriteToPacket() {
 
 action processentry16() {
     write_data_entry16.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry16() {
+    equ0_write_data_entry16.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry16() {
@@ -374,8 +438,8 @@ action noequ0_processentry16andWriteToPacket() {
     noequ0_write_read_data_entry16.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry16() {
-    clean_entry16.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry16() {
+    substitute_entry16.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry16WriteToPacket() {
@@ -384,6 +448,10 @@ action entry16WriteToPacket() {
 
 action processentry17() {
     write_data_entry17.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry17() {
+    equ0_write_data_entry17.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry17() {
@@ -398,8 +466,8 @@ action noequ0_processentry17andWriteToPacket() {
     noequ0_write_read_data_entry17.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry17() {
-    clean_entry17.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry17() {
+    substitute_entry17.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry17WriteToPacket() {
@@ -408,6 +476,10 @@ action entry17WriteToPacket() {
 
 action processentry18() {
     write_data_entry18.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry18() {
+    equ0_write_data_entry18.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry18() {
@@ -422,8 +494,8 @@ action noequ0_processentry18andWriteToPacket() {
     noequ0_write_read_data_entry18.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry18() {
-    clean_entry18.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry18() {
+    substitute_entry18.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry18WriteToPacket() {
@@ -432,6 +504,10 @@ action entry18WriteToPacket() {
 
 action processentry19() {
     write_data_entry19.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry19() {
+    equ0_write_data_entry19.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry19() {
@@ -446,8 +522,8 @@ action noequ0_processentry19andWriteToPacket() {
     noequ0_write_read_data_entry19.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry19() {
-    clean_entry19.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry19() {
+    substitute_entry19.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry19WriteToPacket() {
@@ -456,6 +532,10 @@ action entry19WriteToPacket() {
 
 action processentry20() {
     write_data_entry20.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry20() {
+    equ0_write_data_entry20.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry20() {
@@ -470,8 +550,8 @@ action noequ0_processentry20andWriteToPacket() {
     noequ0_write_read_data_entry20.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry20() {
-    clean_entry20.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry20() {
+    substitute_entry20.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry20WriteToPacket() {
@@ -480,6 +560,10 @@ action entry20WriteToPacket() {
 
 action processentry21() {
     write_data_entry21.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry21() {
+    equ0_write_data_entry21.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry21() {
@@ -494,8 +578,8 @@ action noequ0_processentry21andWriteToPacket() {
     noequ0_write_read_data_entry21.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry21() {
-    clean_entry21.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry21() {
+    substitute_entry21.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry21WriteToPacket() {
@@ -504,6 +588,10 @@ action entry21WriteToPacket() {
 
 action processentry22() {
     write_data_entry22.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry22() {
+    equ0_write_data_entry22.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry22() {
@@ -518,8 +606,8 @@ action noequ0_processentry22andWriteToPacket() {
     noequ0_write_read_data_entry22.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry22() {
-    clean_entry22.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry22() {
+    substitute_entry22.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry22WriteToPacket() {
@@ -528,6 +616,10 @@ action entry22WriteToPacket() {
 
 action processentry23() {
     write_data_entry23.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry23() {
+    equ0_write_data_entry23.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry23() {
@@ -542,8 +634,8 @@ action noequ0_processentry23andWriteToPacket() {
     noequ0_write_read_data_entry23.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry23() {
-    clean_entry23.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry23() {
+    substitute_entry23.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry23WriteToPacket() {
@@ -552,6 +644,10 @@ action entry23WriteToPacket() {
 
 action processentry24() {
     write_data_entry24.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry24() {
+    equ0_write_data_entry24.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry24() {
@@ -566,8 +662,8 @@ action noequ0_processentry24andWriteToPacket() {
     noequ0_write_read_data_entry24.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry24() {
-    clean_entry24.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry24() {
+    substitute_entry24.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry24WriteToPacket() {
@@ -576,6 +672,10 @@ action entry24WriteToPacket() {
 
 action processentry25() {
     write_data_entry25.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry25() {
+    equ0_write_data_entry25.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry25() {
@@ -590,8 +690,8 @@ action noequ0_processentry25andWriteToPacket() {
     noequ0_write_read_data_entry25.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry25() {
-    clean_entry25.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry25() {
+    substitute_entry25.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry25WriteToPacket() {
@@ -600,6 +700,10 @@ action entry25WriteToPacket() {
 
 action processentry26() {
     write_data_entry26.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry26() {
+    equ0_write_data_entry26.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry26() {
@@ -614,8 +718,8 @@ action noequ0_processentry26andWriteToPacket() {
     noequ0_write_read_data_entry26.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry26() {
-    clean_entry26.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry26() {
+    substitute_entry26.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry26WriteToPacket() {
@@ -624,6 +728,10 @@ action entry26WriteToPacket() {
 
 action processentry27() {
     write_data_entry27.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry27() {
+    equ0_write_data_entry27.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry27() {
@@ -638,8 +746,8 @@ action noequ0_processentry27andWriteToPacket() {
     noequ0_write_read_data_entry27.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry27() {
-    clean_entry27.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry27() {
+    substitute_entry27.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry27WriteToPacket() {
@@ -648,6 +756,10 @@ action entry27WriteToPacket() {
 
 action processentry28() {
     write_data_entry28.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry28() {
+    equ0_write_data_entry28.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry28() {
@@ -662,8 +774,8 @@ action noequ0_processentry28andWriteToPacket() {
     noequ0_write_read_data_entry28.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry28() {
-    clean_entry28.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry28() {
+    substitute_entry28.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry28WriteToPacket() {
@@ -672,6 +784,10 @@ action entry28WriteToPacket() {
 
 action processentry29() {
     write_data_entry29.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry29() {
+    equ0_write_data_entry29.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry29() {
@@ -686,8 +802,8 @@ action noequ0_processentry29andWriteToPacket() {
     noequ0_write_read_data_entry29.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry29() {
-    clean_entry29.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry29() {
+    substitute_entry29.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry29WriteToPacket() {
@@ -696,6 +812,10 @@ action entry29WriteToPacket() {
 
 action processentry30() {
     write_data_entry30.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry30() {
+    equ0_write_data_entry30.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry30() {
@@ -710,8 +830,8 @@ action noequ0_processentry30andWriteToPacket() {
     noequ0_write_read_data_entry30.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry30() {
-    clean_entry30.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry30() {
+    substitute_entry30.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry30WriteToPacket() {
@@ -720,6 +840,10 @@ action entry30WriteToPacket() {
 
 action processentry31() {
     write_data_entry31.execute_stateful_alu(p4ml_agtr_index.agtr);
+}
+
+action equ0_processentry31() {
+    equ0_write_data_entry31.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action noequ0_processentry31() {
@@ -734,35 +858,10 @@ action noequ0_processentry31andWriteToPacket() {
     noequ0_write_read_data_entry31.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
-action do_cleanEntry31() {
-    clean_entry31.execute_stateful_alu(p4ml_agtr_index.agtr);
+action do_substituteEntry31() {
+    substitute_entry31.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
 
 action entry31WriteToPacket() {
     read_data_entry31.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
-
-//action processentry32() {
-//    write_data_entry32.execute_stateful_alu(p4ml_agtr_index.agtr);
-//}
-
-//actionoequ0_n processentry32() {
-//  noequ0_  write_data_entry32.execute_stateful_alu(p4ml_agtr_index.agtr);
-//}
-//
-//action processentry32andWriteToPacket() {
-//    write_read_data_entry32.execute_stateful_alu(p4ml_agtr_index.agtr);
-//}
-
-//actionoequ0_n processentry32andWriteToPacket() {
-//  noequ0_  write_read_data_entry32.execute_stateful_alu(p4ml_agtr_index.agtr);
-//}
-
-//action do_cleanEntryry32() {
-//    clean_entry32.execute_stateful_alu(p4ml_agtr_index.agtr);
-
-
-//action entry32WriteToPacket() {
-//    read_data_entry32.execute_stateful_alu(p4ml_agtr_index.agtr);
-//}
-//

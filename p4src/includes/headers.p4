@@ -47,9 +47,10 @@ header_type p4ml_t {
         agtr_time      :  8;
         overflow       :  1;
         /* For multiple PS */
-        PSIndex        :  2;
+        drop           :  1;
+        PSIndex        :  1;
         /* For signle PS */
-        // reserved       :  2;
+        // reserved       :  1;
         // isForceFoward  :  1;
         dataIndex      :  1; 
         ECN            :  1;
@@ -138,10 +139,12 @@ header_type entry_t {
 header_type p4ml_meta_t {
     fields {
         // P4ML
-        isMyAppIDandMyCurrentSeq : 16;
         bitmap                   : 32;
         isAggregate              : 32;
         agtr_time                : 8;
+        isOccupiedandNotMyAppIDandMyCurrentSeq : 32;
+        need_send_out            : 1;
+        need_aggregate           : 1;
         integrated_bitmap        : 32;
         current_agtr_time        : 8;
         agtr_index 	          	 : 32;

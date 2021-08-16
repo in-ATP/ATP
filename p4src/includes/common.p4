@@ -52,24 +52,27 @@ blackbox stateful_alu check_app_id_and_seq {
     // The agtr is empty
     condition_hi           :  register_lo == 0;
 
-    update_lo_1_predicate  :  condition_lo or condition_hi;
+    // update_lo_1_predicate  :  condition_hi;
     update_lo_1_value      :  p4ml.appIDandSeqNum;
 
-    output_predicate       :  condition_lo or condition_hi;
-    output_dst             :  mdata.isMyAppIDandMyCurrentSeq;
-    output_value           :  p4ml.appIDandSeqNum;
+    output_predicate       :  not condition_lo and not condition_hi;
+    output_dst             :  mdata.isOccupiedandNotMyAppIDandMyCurrentSeq;
+    output_value           :  register_lo;
 }
 
+// TODO: TO BE FIXED
 blackbox stateful_alu check_app_id_and_seq_resend {
     reg: appID_and_Seq;
 
     condition_lo           :  p4ml.appIDandSeqNum == register_lo;
+    // The agtr is empty
+    condition_hi           :  register_lo == 0;
 
     update_lo_1_predicate  :  condition_lo;
     update_lo_1_value      :  0;
 
-    output_predicate       :  condition_lo;
-    output_dst             :  mdata.isMyAppIDandMyCurrentSeq;
+    output_predicate       :  not condition_lo;
+    output_dst             :  mdata.isOccupiedandNotMyAppIDandMyCurrentSeq;
     output_value           :  register_lo;
 }
 
@@ -81,40 +84,41 @@ blackbox stateful_alu clean_app_id_and_seq {
     update_lo_1_predicate  :  condition_lo;
     update_lo_1_value      :  0;
 
-    output_predicate       :  condition_lo;
-    output_dst             :  mdata.isMyAppIDandMyCurrentSeq;
-    output_value           :  p4ml.appIDandSeqNum;
+    output_predicate       :  not condition_lo;
+    output_dst             :  mdata.isOccupiedandNotMyAppIDandMyCurrentSeq;
+    output_value           :  register_lo;
 }
 
 blackbox stateful_alu check_agtrTime {
     reg: agtr_time;
 
     condition_lo           :  mdata.isAggregate != 0;
-    output_dst             :  mdata.current_agtr_time; 
 
     update_lo_1_predicate  :  condition_lo;
     update_lo_1_value      :  register_lo + 1;
 
-    update_lo_2_predicate  :  not condition_lo;
-    update_lo_2_value      :  register_lo;
+    // Independent 
 
-    output_value           :  alu_lo;
+    condition_hi           :  register_lo == p4ml.agtr_time - 1;
+
+    output_dst             :  mdata.need_send_out; 
+    output_predicate 	   :  condition_hi;
+    output_value           :  combined_predicate;
 }
 
 blackbox stateful_alu check_resend_agtrTime {
     reg: agtr_time;
 
     condition_lo           :  mdata.isAggregate != 0;
-    // fake, force forward
-    output_dst             :  mdata.current_agtr_time; 
 
-    update_lo_1_predicate  :  condition_lo;
     update_lo_1_value      :  0;
 
-    update_lo_2_predicate  :  not condition_lo;
-    update_lo_2_value      :  0;
+    // Independent
 
-    output_value           :  p4ml.agtr_time;
+    // fake, force forward
+    output_dst             :  mdata.need_send_out; 
+    output_predicate 	   :  condition_lo or not condition_lo;
+    output_value           :  combined_predicate;
 }
 
 blackbox stateful_alu do_comp_qdepth {
@@ -136,7 +140,7 @@ blackbox stateful_alu do_check_ecn {
     update_lo_1_value      :  register_lo | mdata.is_ecn;
 
 	output_predicate 	   :  condition_lo;
-    output_value           :  mdata.value_one;
+    output_value           :  combined_predicate;
     output_dst             :  p4ml.ECN;
 }
 
@@ -163,6 +167,10 @@ action check_aggregate_and_forward() {
     bit_or(mdata.integrated_bitmap, p4ml.bitmap, mdata.bitmap);
 }
 
+action set_need_aggregate() {
+    modify_field(mdata.need_aggregate, 1);
+}
+
 action clean_agtr_time() {
     cleaning_agtr_time.execute_stateful_alu(p4ml_agtr_index.agtr);
 }
@@ -181,12 +189,10 @@ action multicast(group) {
 
 action check_appID_and_seq() {
     check_app_id_and_seq.execute_stateful_alu(p4ml_agtr_index.agtr);
-    //modify_field(mdata.qdepth, 0);   
 }
 
 action check_appID_and_seq_resend() {
     check_app_id_and_seq_resend.execute_stateful_alu(p4ml_agtr_index.agtr);
- //   modify_field(mdata.qdepth, 0);   
 }
 
 action clean_appID_and_seq() {
@@ -203,6 +209,10 @@ action check_resend_agtr_time() {
 
 action modify_packet_bitmap() {
     modify_field(p4ml.bitmap, mdata.integrated_bitmap);
+}
+
+action write_back_appIDandSeq() {
+    modify_field(p4ml.appIDandSeqNum, mdata.isOccupiedandNotMyAppIDandMyCurrentSeq);
 }
 
 action do_qdepth() {
@@ -278,6 +288,14 @@ table bitmap_aggregate_table {
         check_aggregate_and_forward;
     }
     default_action: check_aggregate_and_forward();
+    size : 1;
+}
+
+table set_need_aggregate_table {
+    actions {
+        set_need_aggregate;
+    }
+    default_action: set_need_aggregate();
     size : 1;
 }
 
@@ -370,6 +388,41 @@ table clean_bitmap_table {
     }
     default_action: clean_bitmap();
     size : 1;
+}
+
+@pragma stage 3
+table agtr_time_table_tolerant {
+    reads {
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq : ternary;
+    }
+    actions {
+        check_agtr_time;
+        clean_agtr_time;
+    }
+    size : 2;
+}
+
+table ecn_table_tolerant {
+    reads {
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq : ternary;
+    }
+    actions {
+        check_ecn;
+        clean_ecn;
+    }
+    size : 2;
+}
+
+
+table bitmap_table_tolerant {
+    reads {
+        mdata.isOccupiedandNotMyAppIDandMyCurrentSeq : ternary;
+    }
+    actions {
+        process_bitmap;
+        clean_bitmap;
+    }
+    size : 2;
 }
 
 /* Counter */
@@ -481,6 +534,13 @@ table drop_table {
     }
     actions {
         drop_pkt; set_egr; set_egr_and_set_index;
+    }
+    default_action: drop_pkt();
+}
+
+table drop_table_immed {
+    actions {
+        drop_pkt; 
     }
     default_action: drop_pkt();
 }
