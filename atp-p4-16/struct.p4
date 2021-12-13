@@ -41,7 +41,8 @@ struct switch_header_t {
     udp_h udp;
     p4ml_h p4ml;
     p4ml_agtr_index_h p4ml_agtr_index;
-    p4ml_bg_h p4ml_bg;
+	p4ml_agtr_index_h p4ml_agtr_index_1;
+    // p4ml_bg_h p4ml_bg;
     entry_h p4ml_entries;
     entry_h p4ml_entries1;
 

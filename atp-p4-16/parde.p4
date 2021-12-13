@@ -95,7 +95,7 @@ parser SwitchIngressParser(
 	}
 	
 	state parse_p4ml_bg {
-	    pkt.extract(hdr.p4ml_bg);
+	    // pkt.extract(hdr.p4ml_bg);
 	   	transition accept;
 	}  
     
@@ -110,6 +110,7 @@ parser SwitchIngressParser(
     }
     state parse_agtr_index{
         pkt.extract(hdr.p4ml_agtr_index);
+		pkt.extract(hdr.p4ml_agtr_index_1);
         transition parse_entry;
     }
     state parse_entry {
@@ -134,6 +135,7 @@ control SwitchIngressDeparser(
         pkt.emit(hdr.p4ml);
 		pkt.emit(hdr.udp);
         pkt.emit(hdr.p4ml_agtr_index);
+        pkt.emit(hdr.p4ml_agtr_index_1);
         pkt.emit(hdr.p4ml_entries);
         pkt.emit(hdr.p4ml_entries1);
     }

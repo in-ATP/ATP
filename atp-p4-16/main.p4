@@ -52,7 +52,7 @@ control SwitchIngress(
 
         if(hdr.p4ml.isValid()){
                   //handle normal p4ml packets
-                appid_seq.apply(hdr, ig_intr_md_for_dprsr, ig_intr_md_for_tm, hdr.p4ml, hdr.p4ml_entries, hdr.p4ml_entries1, ig_md.mdata, hdr.p4ml_agtr_index);
+                appid_seq.apply(hdr, ig_intr_md, ig_intr_md_for_dprsr, ig_intr_md_for_tm, hdr.p4ml, hdr.p4ml_entries, hdr.p4ml_entries1, ig_md.mdata, hdr.p4ml_agtr_index);
         
         }else{
             //bg traffic; only forward;

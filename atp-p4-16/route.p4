@@ -1,5 +1,6 @@
 control Route(
         inout switch_header_t hdr,
+        in ingress_intrinsic_metadata_t ig_intr_md,
         inout ingress_intrinsic_metadata_for_deparser_t ig_intr_md_for_dprsr,
         inout ingress_intrinsic_metadata_for_tm_t ig_intr_md_for_tm,
         inout  bit<1> dataIndex
@@ -29,17 +30,20 @@ control Route(
 
 	table dmac {
 		key = {
-			hdr.ethernet.dst_addr : exact;
-            dataIndex: exact;
+			hdr.p4ml.appIDandSeqNum: ternary;
+        	ig_intr_md.ingress_port: exact;
+        	hdr.p4ml.dataIndex: exact;
+        	// hdr.p4ml.PSIndex: exact;
 		}
 
 		actions = {
 			dmac_forward;
             dmac_forward_and_set_dataIndex;
-			@defaultonly dmac_miss;
+			// @defaultonly dmac_forward_and_set_dataIndex;
+            @defaultonly dmac_miss;
 		}
 
-		const default_action = dmac_miss;
+		const default_action = dmac_miss();
 		size = 64;
 	}
     apply{
