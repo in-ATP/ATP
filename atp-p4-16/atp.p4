@@ -10,6 +10,7 @@ Register<bit<32>, bit<1>>(1, 0) loss_counter;
 
 control AtpAck(
         in p4ml_h p4ml,
+		in ingress_intrinsic_metadata_t ig_intr_md,
         inout ingress_intrinsic_metadata_for_tm_t ig_intr_md_for_tm,
         inout p4ml_meta_h mdata,
         in p4ml_agtr_index_h p4ml_agtr_index
@@ -53,6 +54,7 @@ control AtpAck(
 	table multicast_table {
 	    key ={
 	        p4ml.isACK: exact;
+			p4ml.appIDandSeqNum : ternary;
 	    }
 	    actions = {
 	        multicast; 
@@ -80,6 +82,7 @@ control AtpAck(
 
 control AppIdSeq(
         inout switch_header_t hdr,
+		in ingress_intrinsic_metadata_t ig_intr_md,
         inout ingress_intrinsic_metadata_for_deparser_t ig_intr_md_for_dprsr,
         inout ingress_intrinsic_metadata_for_tm_t ig_intr_md_for_tm,
         inout p4ml_h p4ml,
@@ -141,20 +144,22 @@ control AppIdSeq(
         mdata.isAggregate = p4ml.bitmap & ~mdata.bitmap;         
         mdata.integrated_bitmap =  p4ml.bitmap | mdata.bitmap;                                                   
     }
-    RegisterAction<bit<32>, total_aggregator_idx_t, bit<1>>(agtr_time) resend_check_agtr_time = {
-        void apply(inout bit<32> value, out bit<1> rv){
+    RegisterAction<bit<8>, total_aggregator_idx_t, bit<8>>(agtr_time) resend_check_agtr_time = {
+        void apply(inout bit<8> value, out bit<8> rv){
             value = 0;
-            rv = 1;
+            rv = p4ml.agtr_time;
             
         }
     };
 
-    RegisterAction<bit<32>, total_aggregator_idx_t, bit<1>>(agtr_time) normal_check_agtr_time = {
-        void apply(inout bit<32> value, out bit<1> rv){
+    RegisterAction<bit<8>, total_aggregator_idx_t, bit<8>>(agtr_time) normal_check_agtr_time = {
+        void apply(inout bit<8> value, out bit<8> rv){
             if(mdata.isAggregate != 0){
                 value = value + 1;
             }
-            rv = (bit<1>)(value[7:0] == p4ml.agtr_time);
+            rv = value;
+            
+            // rv = (bit<1>)(value[7:0] == p4ml.agtr_time);
         }
     };
 
@@ -183,100 +188,108 @@ control AppIdSeq(
         size = 2;
 	}
 
-    @pragma stage 4
-    ProcessData0() process_data0;
-    ProcessData1() process_data1;
-    ProcessData2() process_data2;
-    ProcessData3() process_data3;
-    ProcessData4() process_data4;
-    ProcessData5() process_data5;
-    ProcessData6() process_data6;
-    ProcessData7() process_data7;
-    ProcessData8() process_data8;
-    ProcessData9() process_data9;
-    ProcessData10() process_data10;
-    ProcessData11() process_data11;
-    ProcessData12() process_data12;
-    ProcessData13() process_data13;
-    ProcessData14() process_data14;
-    ProcessData15() process_data15;
-    ProcessData16() process_data16;
-    ProcessData17() process_data17;
-    ProcessData18() process_data18;
-    ProcessData19() process_data19;
-    ProcessData20() process_data20;
-    ProcessData21() process_data21;
-    ProcessData22() process_data22;
-    ProcessData23() process_data23;
-    ProcessData24() process_data24;
-    ProcessData25() process_data25;
-    ProcessData26() process_data26;
-    ProcessData27() process_data27;
-    ProcessData28() process_data28;
-    ProcessData29() process_data29;
-    ProcessData30() process_data30;
+    // @pragma stage 4
+    // ProcessData0() process_data0;
+    // ProcessData1() process_data1;
+    // ProcessData2() process_data2;
+    // ProcessData3() process_data3;
+    // ProcessData4() process_data4;
+    // ProcessData5() process_data5;
+    // ProcessData6() process_data6;
+    // ProcessData7() process_data7;
+    // ProcessData8() process_data8;
+    // ProcessData9() process_data9;
+    // ProcessData10() process_data10;
+    // ProcessData11() process_data11;
+    // ProcessData12() process_data12;
+    // ProcessData13() process_data13;
+    // ProcessData14() process_data14;
+    // ProcessData15() process_data15;
+    // ProcessData16() process_data16;
+    // ProcessData17() process_data17;
+    // ProcessData18() process_data18;
+    // ProcessData19() process_data19;
+    // ProcessData20() process_data20;
+    // ProcessData21() process_data21;
+    // ProcessData22() process_data22;
+    // ProcessData23() process_data23;
+    // ProcessData24() process_data24;
+    // ProcessData25() process_data25;
+    // ProcessData26() process_data26;
+    // ProcessData27() process_data27;
+    // ProcessData28() process_data28;
+    // ProcessData29() process_data29;
+    // ProcessData30() process_data30;
 
     AtpAck() atp_ack;
     Route() route;
 
     apply{
-          if (hdr.ipv4.diffserv == 0b11 || p4ml.ECN == 1) {
+        if (hdr.ipv4.diffserv == 0b11 || p4ml.ECN == 1) {
             setup_ecn_action();
-          }
-          if(p4ml.isACK == 1){
-            atp_ack.apply(p4ml, ig_intr_md_for_tm, mdata, p4ml_agtr_index);
-          }else{
-              if(p4ml.overflow == 1){
-                  route.apply(hdr, ig_intr_md_for_dprsr, ig_intr_md_for_tm, p4ml.dataIndex);
-              }else{
+        }
+        if(p4ml.isACK == 1){
+            atp_ack.apply(p4ml, ig_intr_md, ig_intr_md_for_tm, mdata, p4ml_agtr_index);
+        }else{
+            if(p4ml.overflow == 1){
+                route.apply(hdr,ig_intr_md, ig_intr_md_for_dprsr, ig_intr_md_for_tm, p4ml.dataIndex,mdata.isMyAppIDandMyCurrentSeq);
+            }else{
 
-                  if(p4ml.isResend == 1){
-                      mdata.isMyAppIDandMyCurrentSeq = resend_check_app_id_and_seq.execute(p4ml_agtr_index.agtr);
-                  }else{
-                      mdata.isMyAppIDandMyCurrentSeq = normal_check_app_id_and_seq.execute(p4ml_agtr_index.agtr);
-                  }
-                  //hit aggregator
-                  if(mdata.isMyAppIDandMyCurrentSeq == 1){
-                      if(p4ml.isResend == 1){
-                          mdata.bitmap = resend_read_write_bitmap.execute(p4ml_agtr_index.agtr);
-                      }else{
-                          mdata.bitmap = normal_read_write_bitmap.execute(p4ml_agtr_index.agtr);
-                      }
-                      p4ml.ECN = update_ecn_bit.execute(p4ml_agtr_index.agtr);
-                      check_aggregate_and_forward();
-                      if(p4ml.isResend == 1){
-                          mdata.need_send_out = resend_check_agtr_time.execute(p4ml_agtr_index.agtr);
-                      }else{
-                          mdata.need_send_out  = normal_check_agtr_time.execute(p4ml_agtr_index.agtr);
-                      }
-                      
-                      PROCESS_ENTRY 
+                if(p4ml.isResend == 1){
+                    mdata.isMyAppIDandMyCurrentSeq = resend_check_app_id_and_seq.execute(p4ml_agtr_index.agtr);
+                }else{
+                    mdata.isMyAppIDandMyCurrentSeq = normal_check_app_id_and_seq.execute(p4ml_agtr_index.agtr);
+                }
+                //hit aggregator
+                if(mdata.isMyAppIDandMyCurrentSeq == 1){
+                    // route.apply(hdr, ig_intr_md, ig_intr_md_for_dprsr, ig_intr_md_for_tm, p4ml.dataIndex, mdata.isMyAppIDandMyCurrentSeq);
+                    
+                    if(p4ml.isResend == 1){
+                        mdata.bitmap = resend_read_write_bitmap.execute(p4ml_agtr_index.agtr);
+                    }else{
+                        mdata.bitmap = normal_read_write_bitmap.execute(p4ml_agtr_index.agtr);
+                    }
+                    p4ml.ECN = update_ecn_bit.execute(p4ml_agtr_index.agtr);
+                    check_aggregate_and_forward();
+                    // if(p4ml.isResend == 1){
+                    //     mdata.need_send_out = resend_check_agtr_time.execute(p4ml_agtr_index.agtr);
+                    // }else{
+                    //     mdata.need_send_out  = normal_check_agtr_time.execute(p4ml_agtr_index.agtr);
+                    // }
+                    if(p4ml.isResend == 1){
+                        mdata.agtr_time = resend_check_agtr_time.execute(p4ml_agtr_index.agtr);
+                    }else{
+                        mdata.agtr_time  = normal_check_agtr_time.execute(p4ml_agtr_index.agtr);
+                    }
+                    
+                    //  PROCESS_ENTRY 
 
-
-                      if (mdata.isAggregate != 0) {
-                          if (mdata.need_send_out == 1) {
-                                modify_packet_bitmap_table.apply();
-                          		route.apply(hdr, ig_intr_md_for_dprsr, ig_intr_md_for_tm, p4ml.dataIndex);
-                            } else {
-                            	drop_pkt();
-							}
-                        } else {
-                            if (mdata.need_send_out == 1) {
-                                modify_packet_bitmap_table.apply();
-                          		route.apply(hdr, ig_intr_md_for_dprsr, ig_intr_md_for_tm, p4ml.dataIndex);
-                            }
+                    if (mdata.isAggregate != 0) {
+                        if (mdata.agtr_time == p4ml.agtr_time) {
+                            modify_packet_bitmap_table.apply();
+                            route.apply(hdr,ig_intr_md, ig_intr_md_for_dprsr, ig_intr_md_for_tm, p4ml.dataIndex, mdata.isMyAppIDandMyCurrentSeq);
+                        } else { 
+                            drop_pkt();
                         }
+                    } else {
+                        if (mdata.agtr_time == p4ml.agtr_time) {
+                            modify_packet_bitmap_table.apply();
+                            route.apply(hdr, ig_intr_md, ig_intr_md_for_dprsr, ig_intr_md_for_tm, p4ml.dataIndex, mdata.isMyAppIDandMyCurrentSeq);
+                        } else {
+                            // route.apply(hdr,ig_intr_md, ig_intr_md_for_dprsr, ig_intr_md_for_tm, p4ml.dataIndex);
+                        }    
+                    }
+                    
+                }else{
+                    /* tag collision bit in incoming one */
+                    // if not empty   
+                    if (p4ml.isResend == 0) {
+                        tag_collision_incoming();
+                    }
+                    route.apply(hdr, ig_intr_md, ig_intr_md_for_dprsr, ig_intr_md_for_tm, p4ml.dataIndex, mdata.isMyAppIDandMyCurrentSeq);
 
-
-                  }else{
-                       /* tag collision bit in incoming one */
-                      // if not empty   
-                      if (p4ml.isResend == 0) {
-                          tag_collision_incoming();
-                      }
-					  route.apply(hdr, ig_intr_md_for_dprsr, ig_intr_md_for_tm, p4ml.dataIndex);
-                  }
-               }
-           }
+                }
+            }
+        }
     }
 }

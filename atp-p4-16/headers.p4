@@ -124,8 +124,8 @@ header p4ml_h{
 
 }
 header p4ml_agtr_index_h{
-    bit<15> agtr;
-    bit<1> pad;
+    bit<16> agtr;
+	// bit<1> pad;
 }
 
 header entry_h{
@@ -165,36 +165,38 @@ data_type_t        data30;
 
 header p4ml_meta_h{
 // P4ML
- 	bit<32>         bitmap                  ;
+ 	bit<1>          isMyAppIDandMyCurrentSeq;
+    bit<7>          pad                     ;
+    bit<32>         bitmap                  ;
  	bit<32>         isAggregate             ;
  	bit<8>          agtr_time               ;
  	bit<32>         integrated_bitmap       ;
  	bit<32>         agtr_index              ;
- 	bit<32>         isDrop                  ;
- 	bit<1>          inside_appID_and_Seq    ;
- 	bit<1>          value_one               ;
- 	bit<1>          isMyAppIDandMyCurrentSeq;
- 	bit<1>          need_send_out          ;
- 	bit<4>          pad                     ;
+ 	// bit<32>         isDrop                  ;
+ 	// bit<1>          inside_appID_and_Seq    ;
+ 	// bit<1>          value_one               ;
+ 	
+ 	// bit<1>          need_send_out           ;
+ 	// bit<6>          pad                     ;
  	bit<16>         qdepth                  ;
- 	bit<8>          seen_bitmap0            ;
- 	bit<8>          seen_isAggregate        ;
+ 	// bit<8>          seen_bitmap0            ;
+ 	// bit<8>          seen_isAggregate        ;
  	bit<8>          is_ecn                  ; 
 }
 
 
 header p4ml_bg_h {
-	bit<64>        key             ; 
-	bit<32>        len_tensor      ; 
-	bit<32>        bitmap          ; 
-	bit<8>         agtr_time       ; 
-	bit<4>         reserved        ; 
-	bit<1>         ECN             ; 
-	bit<1>         isResend        ; 
-	bit<1>         isSWCollision   ; 
-	bit<1>         isACK           ; 
-	bit<16>        agtr            ; 
-	bit<32>        appIDandSeqNum  ;   
+	// bit<64>        key             ; 
+	// bit<32>        len_tensor      ; 
+	// bit<32>        bitmap          ; 
+	// bit<8>         agtr_time       ; 
+	// bit<4>         reserved        ; 
+	// bit<1>         ECN             ; 
+	// bit<1>         isResend        ; 
+	// bit<1>         isSWCollision   ; 
+	// bit<1>         isACK           ; 
+	// bit<16>        agtr            ; 
+	// bit<32>        appIDandSeqNum  ;   
 }
 
 #endif /* _HEADERS_ */
